@@ -1,0 +1,11 @@
+{
+  "entity.myrotpaddon.example_stand": "Example Stand",
+  "stand.myrotpaddon.example_stand": "Example Stand",
+  "action.myrotpaddon.example_stand_punch": "Punch",
+  "action.myrotpaddon.example_stand_heavy_punch": "Heavy Punch",
+  "action.myrotpaddon.example_stand_finisher_punch": "Finisher Punch",
+  "action.myrotpaddon.example_stand_barrage": "Punch Barrage",
+  "action.myrotpaddon.example_stand_block": "Block",
+  "action.myrotpaddon.example_stand_throw_pickaxe": "Throw Pickaxe",
+  "entity.myrotpaddon.example_pickaxe": "Pickaxe"
+}
