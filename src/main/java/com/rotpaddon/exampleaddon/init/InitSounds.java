@@ -30,6 +30,9 @@ public class InitSounds {
     public static final Supplier<SoundEvent> EXAMPLE_STAND_PUNCH_BARRAGE = ModSounds.STAND_PUNCH_LIGHT;
     
     public static final Supplier<SoundEvent> EXAMPLE_STAND_THROW_PICKAXE = ModSounds.STAND_PUNCH_LIGHT;
+
+    public static final RegistryObject<SoundEvent> EXAMPLE_STAND_CALAMITY = SOUNDS.register("calamity",
+            () -> new SoundEvent(new ResourceLocation(AddonMain.MOD_ID, "wou")));
     
     public static final OstSoundList EXAMPLE_STAND_OST = new OstSoundList(
             new ResourceLocation(AddonMain.MOD_ID, "example_stand_ost"), SOUNDS);
