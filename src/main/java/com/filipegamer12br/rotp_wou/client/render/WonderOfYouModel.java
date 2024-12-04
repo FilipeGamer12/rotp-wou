@@ -22,7 +22,6 @@ public class WonderOfYouModel extends HumanoidStandModel<WonderOfYouEntity> {
     protected RotationAngle[][] initSummonPoseRotations() {
         return new RotationAngle[][] {
             new RotationAngle[] {
-                    
             },
             new RotationAngle[] {
                     
