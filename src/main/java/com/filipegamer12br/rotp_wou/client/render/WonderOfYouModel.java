@@ -1,4 +1,4 @@
-package com.rotpaddon.exampleaddon.client.render;
+package com.filipegamer12br.rotp_wou.client.render;
 
 import com.github.standobyte.jojo.action.stand.StandEntityAction;
 import com.github.standobyte.jojo.client.render.entity.model.stand.HumanoidStandModel;
@@ -7,14 +7,14 @@ import com.github.standobyte.jojo.client.render.entity.pose.ModelPose;
 import com.github.standobyte.jojo.client.render.entity.pose.RotationAngle;
 import com.github.standobyte.jojo.client.render.entity.pose.anim.PosedActionAnimation;
 import com.github.standobyte.jojo.entity.stand.StandPose;
-import com.rotpaddon.exampleaddon.entity.ExampleStandEntity;
+import com.filipegamer12br.rotp_wou.entity.WonderOfYouEntity;
 
 import net.minecraft.client.renderer.model.ModelRenderer;
 
-public class ExampleStandModel extends HumanoidStandModel<ExampleStandEntity> {
+public class WonderOfYouModel extends HumanoidStandModel<WonderOfYouEntity> {
     private ModelRenderer pickaxe;
 
-	public ExampleStandModel() {
+	public WonderOfYouModel() {
 		super();
 	}
 
@@ -32,7 +32,7 @@ public class ExampleStandModel extends HumanoidStandModel<ExampleStandEntity> {
     
     @Override
     protected void initActionPoses() { // TODO pickaxe throwing anim
-        actionAnim.put(StandPose.RANGED_ATTACK, new PosedActionAnimation.Builder<ExampleStandEntity>()
+        actionAnim.put(StandPose.RANGED_ATTACK, new PosedActionAnimation.Builder<WonderOfYouEntity>()
                 .addPose(StandEntityAction.Phase.BUTTON_HOLD, new ModelPose<>(new RotationAngle[] {
                         new RotationAngle(body, 0.0F, -0.48F, 0.0F),
                         new RotationAngle(leftArm, 0.0F, 0.0F, -0.7854F),
@@ -46,22 +46,22 @@ public class ExampleStandModel extends HumanoidStandModel<ExampleStandEntity> {
     }
 
     @Override
-    public void prepareMobModel(ExampleStandEntity entity, float walkAnimPos, float walkAnimSpeed, float partialTick) {
+    public void prepareMobModel(WonderOfYouEntity entity, float walkAnimPos, float walkAnimSpeed, float partialTick) {
         super.prepareMobModel(entity, walkAnimPos, walkAnimSpeed, partialTick);
         if (pickaxe != null) {
-            pickaxe.visible = entity.hasPickaxe();
+            pickaxe.visible = entity.isCalamityEnabled();
         }
     }
     
     
 
     @Override // TODO idle pose
-    protected ModelPose<ExampleStandEntity> initIdlePose() {
+    protected ModelPose<WonderOfYouEntity> initIdlePose() {
         return super.initIdlePose();
     }
 
     @Override
-    protected IModelPose<ExampleStandEntity> initIdlePose2Loop() {
+    protected IModelPose<WonderOfYouEntity> initIdlePose2Loop() {
         return super.initIdlePose2Loop();
     }
 }

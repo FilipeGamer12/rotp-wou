@@ -1,0 +1,10 @@
+{
+  "entity.rotp_wou.wonder_of_you": "Wonder Of You",
+  "stand.rotp_wou.wonder_of_you": "Wonder Of You",
+  "action.rotp_wou.punch": "Punch",
+  "action.rotp_wou.heavy_punch": "Heavy Punch",
+  "action.rotp_wou.finisher_punch": "Finisher",
+  "action.rotp_wou.barrage": "Barrage",
+  "action.rotp_wou.block": "Block",
+  "entity.rotp_wou.calamity": "Calamity"
+}
