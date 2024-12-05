@@ -9,7 +9,9 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
 
 public class WonderOfYouEntity extends StandEntity {
-    private static final DataParameter<Boolean> IS_CALAMITY_ENABLED =
+    private static final DataParameter<Boolean> IS_CALAMITY_PASSIVE_ENABLED =
+            EntityDataManager.defineId(WonderOfYouEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_CALAMITY_ACTIVE_ENABLED =
             EntityDataManager.defineId(WonderOfYouEntity.class, DataSerializers.BOOLEAN);
 
     public WonderOfYouEntity(StandEntityType<WonderOfYouEntity> type, World world) {
@@ -19,14 +21,25 @@ public class WonderOfYouEntity extends StandEntity {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        entityData.define(IS_CALAMITY_ENABLED, false);
+        entityData.define(IS_CALAMITY_PASSIVE_ENABLED, false);  // Inicializa como desativado
+        entityData.define(IS_CALAMITY_ACTIVE_ENABLED, false);    // Inicializa como desativado
     }
-    
-    public boolean isCalamityEnabled() {
-        return entityData.get(IS_CALAMITY_ENABLED);
+
+    // Habilidade Calamity Passive
+    public boolean isCalamityPassiveEnabled() {
+        return entityData.get(IS_CALAMITY_PASSIVE_ENABLED);
     }
-    
-    public void setIsCalamityEnabled(boolean status) {
-        entityData.set(IS_CALAMITY_ENABLED, status);
+
+    public void setIsCalamityPassiveEnabled(boolean status) {
+        entityData.set(IS_CALAMITY_PASSIVE_ENABLED, status);
+    }
+
+    // Habilidade Calamity Active
+    public boolean isCalamityActiveEnabled() {
+        return entityData.get(IS_CALAMITY_ACTIVE_ENABLED);
+    }
+
+    public void setIsCalamityActiveEnabled(boolean status) {
+        entityData.set(IS_CALAMITY_ACTIVE_ENABLED, status);
     }
 }

@@ -7,29 +7,32 @@ import com.github.standobyte.jojo.entity.stand.StandEntity;
 import com.github.standobyte.jojo.entity.stand.StandEntityTask;
 import com.github.standobyte.jojo.power.impl.stand.IStandPower;
 
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
 
-public class Calamity extends StandEntityAction {
-    public Calamity(StandEntityAction.Builder builder) {
+public class CalamityActive extends StandEntityAction {
+    public CalamityActive(StandEntityAction.Builder builder) {
         super(builder);
     }
-    
+
     @Override
     public void standPerform(World world, StandEntity standEntity, IStandPower userPower, StandEntityTask task) {
         if (!world.isClientSide()) {
             WonderOfYouEntity wouEntity = (WonderOfYouEntity) standEntity;
-            if (wouEntity != null){
-                System.out.println(wouEntity.isCalamityEnabled());
-                wouEntity.setIsCalamityEnabled(!wouEntity.isCalamityEnabled());
-                System.out.println(wouEntity.isCalamityEnabled());
+            if (wouEntity != null) {
+                // Ativa a habilidade "Calamity Active"
+                wouEntity.setIsCalamityActiveEnabled(!wouEntity.isCalamityActiveEnabled());
+                System.out.println("Calamity Active: " + wouEntity.isCalamityActiveEnabled());
             }
         }
     }
 
     @Override
     public boolean greenSelection(IStandPower power, ActionConditionResult conditionCheck) {
-        if (power != null && power.getStandManifestation() instanceof WonderOfYouEntity){
-            return ((WonderOfYouEntity) power.getStandManifestation()).isCalamityEnabled();
+        if (power != null && power.getStandManifestation() instanceof WonderOfYouEntity) {
+            return ((WonderOfYouEntity) power.getStandManifestation()).isCalamityActiveEnabled();
         }
         return false;
     }

@@ -2,7 +2,6 @@ package com.filipegamer12br.rotp_wou.init;
 
 import com.github.standobyte.jojo.action.Action;
 import com.github.standobyte.jojo.action.stand.StandEntityAction;
-import com.github.standobyte.jojo.action.stand.StandEntityBlock;
 import com.github.standobyte.jojo.action.stand.StandEntityHeavyAttack;
 import com.github.standobyte.jojo.action.stand.StandEntityLightAttack;
 import com.github.standobyte.jojo.action.stand.StandEntityMeleeBarrage;
@@ -13,7 +12,8 @@ import com.github.standobyte.jojo.power.impl.stand.stats.StandStats;
 import com.github.standobyte.jojo.power.impl.stand.type.EntityStandType;
 import com.github.standobyte.jojo.power.impl.stand.type.StandType;
 import com.filipegamer12br.rotp_wou.WonderOfYouAddon;
-import com.filipegamer12br.rotp_wou.action.Calamity;
+import com.filipegamer12br.rotp_wou.action.CalamityPassive;
+import com.filipegamer12br.rotp_wou.action.CalamityActive;
 import com.filipegamer12br.rotp_wou.entity.WonderOfYouEntity;
 
 import com.github.standobyte.jojo.util.mod.StoryPart;
@@ -38,26 +38,17 @@ public class InitStands {
             () -> new StandEntityMeleeBarrage(new StandEntityMeleeBarrage.Builder()
                     .barrageHitSound(InitSounds.BARRAGE)));
 
-    public static final RegistryObject<StandEntityHeavyAttack> EXAMPLE_STAND_FINISHER_PUNCH = ACTIONS.register("finisher_punch",
-            () -> new StandEntityHeavyAttack(new StandEntityHeavyAttack.Builder()
-                    .punchSound(InitSounds.PUNCH_HEAVY)
-                    .partsRequired(StandPart.ARMS)));
-
-    public static final RegistryObject<StandEntityHeavyAttack> HEAVY_PUNCH = ACTIONS.register("heavy_punch",
-            () -> new StandEntityHeavyAttack(new StandEntityHeavyAttack.Builder()
-                    .shiftVariationOf(PUNCH)
-                    .shiftVariationOf(BARRAGE)
-                    .setFinisherVariation(EXAMPLE_STAND_FINISHER_PUNCH)
-                    .punchSound(InitSounds.PUNCH_HEAVY)
-                    .partsRequired(StandPart.ARMS)));
-
-    public static final RegistryObject<StandEntityAction> BLOCK = ACTIONS.register("block",
-            () -> new StandEntityBlock());
-
-    public static final RegistryObject<Calamity> CALAMITY = ACTIONS.register("calamity",
-            () -> new Calamity(new Calamity.Builder()
+    public static final RegistryObject<CalamityPassive> CALAMITY_PASSIVE = ACTIONS.register("calamity_passive",
+            () -> new CalamityPassive(new CalamityPassive.Builder()
                     .holdToFire(15, false)
                     .staminaCost(75)
+                    .standSound(InitSounds.CALAMITY)
+                    .partsRequired(StandPart.MAIN_BODY)));
+
+    public static final RegistryObject<CalamityActive> CALAMITY_ACTIVE = ACTIONS.register("calamity_active",
+            () -> new CalamityActive(new CalamityActive.Builder()
+                    .holdToFire(15, false)
+                    .staminaCost(150)
                     .standSound(InitSounds.CALAMITY)
                     .partsRequired(StandPart.MAIN_BODY)));
 
@@ -65,15 +56,15 @@ public class InitStands {
             new EntityStandRegistryObject<>("wonder_of_you",
                     STANDS,
                     () -> new EntityStandType.Builder<>()
-                            .color(0x9a6a11)
+                            .color(0x614208)
                             .storyPartName(StoryPart.JOJOLION.getName())
                             .leftClickHotbar(
                                     PUNCH.get(),
                                     BARRAGE.get()
                             )
                             .rightClickHotbar(
-                                    BLOCK.get(),
-                                    CALAMITY.get()
+                                    CALAMITY_PASSIVE.get(),
+                                    CALAMITY_ACTIVE.get()
                             )
                             .defaultStats(StandStats.class, new StandStats.Builder()
                                     .tier(6)
@@ -92,5 +83,4 @@ public class InitStands {
                             .summonSound(InitSounds.SUMMON_SOUND)
                             .unsummonSound(InitSounds.UNSUMMON_SOUND))
                     .withDefaultStandAttributes();
-
 }
