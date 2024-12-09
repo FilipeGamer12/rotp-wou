@@ -9,10 +9,10 @@ import com.github.standobyte.jojo.client.render.entity.pose.anim.PosedActionAnim
 import com.github.standobyte.jojo.entity.stand.StandPose;
 import com.filipegamer12br.rotp_wou.entity.WonderOfYouEntity;
 
-import net.minecraft.client.renderer.model.ModelRenderer;
+//import net.minecraft.client.renderer.model.ModelRenderer;
 
 public class WonderOfYouModel extends HumanoidStandModel<WonderOfYouEntity> {
-    private ModelRenderer pickaxe;
+    //private ModelRenderer pickaxe;
 
     public WonderOfYouModel() {
         super();
@@ -43,6 +43,7 @@ public class WonderOfYouModel extends HumanoidStandModel<WonderOfYouEntity> {
         super.initActionPoses();
     }
 
+    /*
     @Override
     public void prepareMobModel(WonderOfYouEntity entity, float walkAnimPos, float walkAnimSpeed, float partialTick) {
         super.prepareMobModel(entity, walkAnimPos, walkAnimSpeed, partialTick);
@@ -50,7 +51,7 @@ public class WonderOfYouModel extends HumanoidStandModel<WonderOfYouEntity> {
             pickaxe.visible = entity.isCalamityActiveEnabled();
         }
     }
-
+*/
     @Override // TODO idle pose
     protected ModelPose<WonderOfYouEntity> initIdlePose() {
         return super.initIdlePose();

@@ -49,7 +49,7 @@ public class InitStands {
                     .punchSound(InitSounds.PUNCH_HEAVY)
                     .partsRequired(StandPart.ARMS)));
 
-    public static final RegistryObject<StandEntityAction> WOU_BLOCK = ACTIONS.register("wou_block",
+    public static final RegistryObject<StandEntityAction> STAND_BLOCK = ACTIONS.register("wou_block",
             () -> new StandEntityBlock());
 
     public static final RegistryObject<CalamityPassive> CALAMITY_PASSIVE = ACTIONS.register("calamity_passive",
@@ -68,7 +68,7 @@ public class InitStands {
 
     public static final RegistryObject<LightningStrike> LIGHTNING_STRIKE = ACTIONS.register("lightning_strike",
             () -> new LightningStrike(new LightningStrike.Builder()
-                    .holdToFire(5, false) // Segurar por 5 ticks
+                    .holdToFire(30, false) // Segurar por 5 ticks
                     .staminaCost(50) // Consome 50 de estamina
                     //.standSound(InitSounds.CALAMITY) // Som associado à habilidade
                     .partsRequired(StandPart.ARMS))); // Parte necessária para executar a habilidade
@@ -86,6 +86,7 @@ public class InitStands {
                                     LIGHTNING_STRIKE.get()
                             )
                             .rightClickHotbar(
+                                    STAND_BLOCK.get(),
                                     CALAMITY_PASSIVE.get(),
                                     CALAMITY_ACTIVE.get()
                             )
