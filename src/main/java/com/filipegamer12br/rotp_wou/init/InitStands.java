@@ -1,5 +1,6 @@
 package com.filipegamer12br.rotp_wou.init;
 
+import com.filipegamer12br.rotp_wou.action.LightningStrike;
 import com.github.standobyte.jojo.action.Action;
 import com.github.standobyte.jojo.action.stand.StandEntityAction;
 import com.github.standobyte.jojo.action.stand.StandEntityHeavyAttack;
@@ -20,6 +21,7 @@ import com.github.standobyte.jojo.util.mod.StoryPart;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 
+
 public class InitStands {
     @SuppressWarnings("unchecked")
     public static final DeferredRegister<Action<?>> ACTIONS = DeferredRegister.create(
@@ -38,6 +40,18 @@ public class InitStands {
             () -> new StandEntityMeleeBarrage(new StandEntityMeleeBarrage.Builder()
                     .barrageHitSound(InitSounds.BARRAGE)));
 
+    public static final RegistryObject<StandEntityHeavyAttack> FINISHER_PUNCH = ACTIONS.register("finisher_punch",
+            () -> new StandEntityHeavyAttack(new StandEntityHeavyAttack.Builder()
+                    .punchSound(InitSounds.PUNCH_HEAVY)
+                    .partsRequired(StandPart.ARMS)));
+
+    public static final RegistryObject<StandEntityHeavyAttack> HEAVY_PUNCH = ACTIONS.register("heavy_punch",
+            () -> new StandEntityHeavyAttack(new StandEntityHeavyAttack.Builder()
+                    .shiftVariationOf(PUNCH).shiftVariationOf(BARRAGE)
+                    .setFinisherVariation(FINISHER_PUNCH)
+                    .punchSound(InitSounds.PUNCH_HEAVY)
+                    .partsRequired(StandPart.ARMS)));
+
     public static final RegistryObject<CalamityPassive> CALAMITY_PASSIVE = ACTIONS.register("calamity_passive",
             () -> new CalamityPassive(new CalamityPassive.Builder()
                     .holdToFire(15, false)
@@ -52,6 +66,14 @@ public class InitStands {
                     .standSound(InitSounds.CALAMITY)
                     .partsRequired(StandPart.MAIN_BODY)));
 
+    public static final RegistryObject<LightningStrike> LIGHTNING_STRIKE = ACTIONS.register("lightning_strike",
+            () -> new LightningStrike(new LightningStrike.Builder()
+                    .holdToFire(5, false) // Segurar por 5 ticks
+                    .staminaCost(50) // Consome 50 de estamina
+                    //.standSound(InitSounds.CALAMITY) // Som associado à habilidade
+                    .partsRequired(StandPart.ARMS))); // Parte necessária para executar a habilidade
+
+
     public static final EntityStandRegistryObject<EntityStandType<StandStats>, StandEntityType<WonderOfYouEntity>> WONDER_OF_YOU =
             new EntityStandRegistryObject<>("wonder_of_you",
                     STANDS,
@@ -60,7 +82,8 @@ public class InitStands {
                             .storyPartName(StoryPart.JOJOLION.getName())
                             .leftClickHotbar(
                                     PUNCH.get(),
-                                    BARRAGE.get()
+                                    BARRAGE.get(),
+                                    LIGHTNING_STRIKE.get()
                             )
                             .rightClickHotbar(
                                     CALAMITY_PASSIVE.get(),
@@ -70,11 +93,11 @@ public class InitStands {
                                     .tier(6)
                                     .power(20)
                                     .speed(20)
-                                    .range(50, 100)
+                                    .range(10000, 10000)
                                     .durability(20)
                                     .precision(20)
                                     .build())
-                            .addSummonShout(InitSounds.SUMMON_VOICELINE)
+                            .addSummonShout(InitSounds.CALAMITY)
                             .addOst(InitSounds.EXAMPLE_STAND_OST)
                             .build(),
 
