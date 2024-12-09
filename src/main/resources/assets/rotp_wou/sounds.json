@@ -1,5 +1,11 @@
 {
   "calamity": {
-    "sounds": [ "rotp_wou:calamity" ]
+    "sounds": [
+      {
+        "name": "rotp_wou:calamity",
+        "stream": true,
+        "preload": true
+      }
+    ]
   }
 }

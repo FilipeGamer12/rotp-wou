@@ -32,6 +32,6 @@ public class InitSounds {
     public static final RegistryObject<SoundEvent> CALAMITY = SOUNDS.register("calamity",
             () -> new SoundEvent(new ResourceLocation(WonderOfYouAddon.MOD_ID, "calamity")));
     
-    public static final OstSoundList EXAMPLE_STAND_OST = new OstSoundList(
+    public static final OstSoundList WOU_OST = new OstSoundList(
             new ResourceLocation(WonderOfYouAddon.MOD_ID, "rotp_wou_ost"), SOUNDS);
 }

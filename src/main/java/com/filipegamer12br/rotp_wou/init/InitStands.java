@@ -2,10 +2,7 @@ package com.filipegamer12br.rotp_wou.init;
 
 import com.filipegamer12br.rotp_wou.action.LightningStrike;
 import com.github.standobyte.jojo.action.Action;
-import com.github.standobyte.jojo.action.stand.StandEntityAction;
-import com.github.standobyte.jojo.action.stand.StandEntityHeavyAttack;
-import com.github.standobyte.jojo.action.stand.StandEntityLightAttack;
-import com.github.standobyte.jojo.action.stand.StandEntityMeleeBarrage;
+import com.github.standobyte.jojo.action.stand.*;
 import com.github.standobyte.jojo.entity.stand.StandEntityType;
 import com.github.standobyte.jojo.init.power.stand.EntityStandRegistryObject;
 import com.github.standobyte.jojo.power.impl.stand.StandInstance.StandPart;
@@ -52,6 +49,9 @@ public class InitStands {
                     .punchSound(InitSounds.PUNCH_HEAVY)
                     .partsRequired(StandPart.ARMS)));
 
+    public static final RegistryObject<StandEntityAction> WOU_BLOCK = ACTIONS.register("wou_block",
+            () -> new StandEntityBlock());
+
     public static final RegistryObject<CalamityPassive> CALAMITY_PASSIVE = ACTIONS.register("calamity_passive",
             () -> new CalamityPassive(new CalamityPassive.Builder()
                     .holdToFire(15, false)
@@ -62,7 +62,7 @@ public class InitStands {
     public static final RegistryObject<CalamityActive> CALAMITY_ACTIVE = ACTIONS.register("calamity_active",
             () -> new CalamityActive(new CalamityActive.Builder()
                     .holdToFire(15, false)
-                    .staminaCost(150)
+                    .staminaCost(200)
                     .standSound(InitSounds.CALAMITY)
                     .partsRequired(StandPart.MAIN_BODY)));
 
@@ -98,7 +98,7 @@ public class InitStands {
                                     .precision(20)
                                     .build())
                             .addSummonShout(InitSounds.CALAMITY)
-                            .addOst(InitSounds.EXAMPLE_STAND_OST)
+                            .addOst(InitSounds.WOU_OST)
                             .build(),
 
                     InitEntities.ENTITIES,
