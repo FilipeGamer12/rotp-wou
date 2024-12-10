@@ -66,7 +66,7 @@ public class InitStands {
 
     public static final RegistryObject<LightningStrike> LIGHTNING_STRIKE = ACTIONS.register("lightning_strike",
             () -> new LightningStrike(new LightningStrike.Builder()
-                    .holdToFire(30, false) // Segurar por 5 ticks
+                    .holdToFire(20, false)
                     .staminaCost(50) // Consome 50 de stamina
                     .partsRequired(StandPart.ARMS))); // Parte necessária para executar a habilidade
 

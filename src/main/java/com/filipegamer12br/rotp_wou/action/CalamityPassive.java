@@ -14,17 +14,24 @@ public class CalamityPassive extends StandEntityAction {
     public CalamityPassive(StandEntityAction.Builder builder) {
         super(builder);
     }
-    
+
     @Override
     public void standPerform(World world, StandEntity standEntity, IStandPower userPower, StandEntityTask task) {
         if (!world.isClientSide()) {
             WonderOfYouEntity wouEntity = (WonderOfYouEntity) standEntity;
-            if (wouEntity != null){
-                wouEntity.setIsCalamityPassiveEnabled(!wouEntity.isCalamityPassiveEnabled());
-                if(wouEntity.isCalamityPassiveEnabled()){ // Special thanks to Hoo
-                    standEntity.playSound(InitSounds.CALAMITY.get(),0.3F,1);
+            if (wouEntity != null) {
+                // Desativa CalamityActive quando CalamityPassive é ativado
+                if (wouEntity.isCalamityActiveEnabled()) {
+                    wouEntity.setIsCalamityActiveEnabled(false);
                 }
-                System.out.println(wouEntity.isCalamityPassiveEnabled());
+
+                // Alterna o estado de CalamityPassive
+                wouEntity.setIsCalamityPassiveEnabled(!wouEntity.isCalamityPassiveEnabled());
+
+                if (wouEntity.isCalamityPassiveEnabled()) {
+                    standEntity.playSound(InitSounds.CALAMITY.get(), 0.3F, 1);
+                }
+                System.out.println("Calamity Passive: " + wouEntity.isCalamityPassiveEnabled());
             }
         }
     }
