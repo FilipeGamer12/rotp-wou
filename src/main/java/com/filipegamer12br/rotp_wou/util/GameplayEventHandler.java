@@ -68,27 +68,29 @@ public class GameplayEventHandler {
                             for (Entity nearbyEntity : target.level.getEntities(target, target.getBoundingBox().inflate(6.0D))) {
                                 if (nearbyEntity instanceof LivingEntity && nearbyEntity != target) {
                                     LivingEntity livingEntity = (LivingEntity) nearbyEntity;
-                                    livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 3, false, false, true)); // Lentidão III.
-                                    livingEntity.addEffect(new EffectInstance(Effects.BLINDNESS, 60, 0, false, false, true)); // Cegueira.
+                                    livingEntity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 3, false, false, true)); // Lentidão III
+                                    livingEntity.addEffect(new EffectInstance(Effects.BLINDNESS, 60, 0, false, false, true)); // Cegueira
                                 }
                             }
 
                             // Refletir dano ao atacante
                             if (event.getEntityLiving() instanceof LivingEntity) {
                                 LivingEntity attacker = (LivingEntity) event.getEntityLiving();
-                                float reflectedDamage = 2.0F;
+
+                                DamageSource damageSource;
                                 if (attacker instanceof PlayerEntity) {
-                                    DamageSource damageSource = DamageSource.playerAttack((PlayerEntity) attacker);
-                                    attacker.hurt(damageSource, reflectedDamage); // Reflete o dano original
-                                } else if (attacker instanceof LivingEntity) {
-                                    DamageSource damageSource = DamageSource.mobAttack(attacker);
-                                    attacker.hurt(damageSource, reflectedDamage); // Reflete o dano original
+                                    damageSource = DamageSource.playerAttack((PlayerEntity) attacker);
+                                } else {
+                                    damageSource = DamageSource.mobAttack(attacker);
                                 }
 
+                                // Aplica o dano fixo de 2.0F ao atacante
+                                attacker.hurt(damageSource, 2.0F);
+
                                 // Aplica efeitos negativos ao atacante
-                                attacker.addEffect(new EffectInstance(Effects.POISON, 100, 1, false, false, true)); // Veneno I.
-                                attacker.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 2, false, false, true)); // Lentidão II.
-                                attacker.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 0, false, false, true)); // Cegueira.
+                                attacker.addEffect(new EffectInstance(Effects.POISON, 100, 1, false, false, true)); // Veneno I
+                                attacker.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 2, false, false, true)); // Lentidão II
+                                attacker.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 0, false, false, true)); // Cegueira
                             }
                         }
                     }
@@ -96,6 +98,24 @@ public class GameplayEventHandler {
             });
         }
     }
+    @SubscribeEvent
+    public static void onLivingHurt(LivingHurtEvent event) {
+        LivingEntity entity = event.getEntityLiving();
+        if (entity != null && !entity.level.isClientSide()) {
+            IStandPower.getStandPowerOptional(entity).ifPresent(power -> {
+                if (power.getType() == InitStands.WONDER_OF_YOU.getStandType() && power.isActive()) {
+                    if (power.getStandManifestation() instanceof WonderOfYouEntity) {
+                        WonderOfYouEntity wonderOfYouEntity = (WonderOfYouEntity) power.getStandManifestation();
 
-
+                        // Verifica se a habilidade CalamityActive está ativa
+                        if (wonderOfYouEntity.isCalamityActiveEnabled()) {
+                            // Reduz o dano recebido pelo usuário para 15% do valor original
+                            float originalDamage = event.getAmount();
+                            event.setAmount(originalDamage * 0.15F); // 15% do dano original
+                        }
+                    }
+                }
+            });
+        }
+    }
 }
