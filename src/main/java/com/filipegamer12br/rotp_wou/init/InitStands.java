@@ -107,7 +107,7 @@ public class InitStands {
 
                     InitEntities.ENTITIES,
                     () -> new StandEntityType<>(WonderOfYouEntity::new, 0.7F, 2.1F)
-                            .summonSound(InitSounds.SUMMON_SOUND)
+                            .summonSound(InitSounds.CALAMITY1)
                             .unsummonSound(InitSounds.UNSUMMON_SOUND))
                     .withDefaultStandAttributes();
 }
