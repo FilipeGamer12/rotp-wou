@@ -1,5 +1,6 @@
 package com.filipegamer12br.rotp_wou.action;
 
+import com.filipegamer12br.rotp_wou.entity.WonderOfYouEntity;
 import com.github.standobyte.jojo.action.ActionConditionResult;
 import com.github.standobyte.jojo.action.ActionTarget;
 import com.github.standobyte.jojo.action.stand.StandEntityAction;
@@ -12,13 +13,16 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.TNTEntity;
 import net.minecraft.entity.monster.CreeperEntity;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
+import java.util.List;
 import java.util.Random;
 
 public class ExplodeVariations extends StandEntityAction {
@@ -29,82 +33,85 @@ public class ExplodeVariations extends StandEntityAction {
     }
 
     @Override
-    public ActionConditionResult checkTarget(ActionTarget target, LivingEntity user, IStandPower power) {
-        if (target.getType() == ActionTarget.TargetType.ENTITY) {
-            Entity targetEntity = target.getEntity();
-            if (targetEntity.is(power.getUser())) {
-                return conditionMessage("cant_attack_self");
-            } else if (targetEntity instanceof StandEntity) {
-                return conditionMessage("cant_attack_stand");
-            }
-            nameOfTarget = targetEntity.getName().getString();
-        } else if (target.getType() == ActionTarget.TargetType.BLOCK) {
-            BlockPos blockPos = target.getBlockPos();
-            BlockState blockState = user.level.getBlockState(blockPos);
-            nameOfTarget = blockState.getBlock().getName().getString();
-        }
-        return ActionConditionResult.POSITIVE;
-    }
-
-    @Override
-    public TargetRequirement getTargetRequirement() {
-        return TargetRequirement.ANY;
-    }
-
-    @Override
-    public void standPerform(World world, StandEntity standEntity, IStandPower userPower, StandEntityTask target) {
+    public void standPerform(World world, StandEntity standEntity, IStandPower userPower, StandEntityTask task) {
         if (!world.isClientSide()) {
-            Vector3d pos;
-            if (target.getTarget().getType() == ActionTarget.TargetType.ENTITY && target.getTarget().getEntity() instanceof LivingEntity) {
-                pos = target.getTarget().getEntity().position();
-            } else if (target.getTarget().getType() == ActionTarget.TargetType.BLOCK) {
-                BlockPos blockPos = target.getTarget().getBlockPos();
-                pos = new Vector3d(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-            } else {
-                pos = null;
-            }
 
-            if (pos != null) {
-                Random random = new Random();
-                switch (random.nextInt(3)) {
-                    case 0:
-                        BlockPos targetBlockPos = new BlockPos(pos.x, pos.y, pos.z);
+            if (world.getServer() == null) // thx weever
+                return;
 
-                        TNTEntity tnt = new TNTEntity(world, targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ(), null);
-                        world.addFreshEntity(tnt);
+            // Realiza o ray tracing (linha de visão) para encontrar o alvo
+            RayTraceResult target = standEntity.aimWithStandOrUser(100, task.getTarget()); // Alcança até 100 blocos
 
-                        tnt.setFuse(10);
+            // Verifica se o ray tracing acertou algo
+            if (target != null && target.getType() == RayTraceResult.Type.ENTITY) {
+                // Obtém a posição do alvo (onde o Stand está mirando)
+                Vector3d pos = target.getLocation();
+                if (pos != null) {
+                    // Verifica o tipo de explosão a ser gerada
+                    Random random = new Random();
+                    switch (random.nextInt(3)) {
+                        case 0:
+                            // TNT normal
+                            BlockPos targetBlockPos = new BlockPos(pos.x, pos.y, pos.z);
+                            TNTEntity tnt = new TNTEntity(world, targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ(), null);
+                            world.addFreshEntity(tnt); // Adiciona o TNT no mundo
+                            tnt.setFuse(10); // Define o fuse para 10 ticks (0.5 segundos)
 
-                        if (world.getServer() == null)
-                            return; // Because have some problem with Mobs and with LAN servers
+                            // Agendar a explosão após 0.5 segundos
+                            world.getServer().execute(() -> {
+                                // Cria a explosão manualmente, sem afetar o terreno
+                                Explosion explosion = new Explosion(world, tnt, null, null, targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ(), 0.0F, false, Explosion.Mode.NONE);
+                                explosion.explode(); // Detona a explosão
+                            });
+                            break;
 
-                        world.getServer().execute(() -> {
-                            Explosion explosion = new Explosion(world, tnt, null, null, targetBlockPos.getX(), targetBlockPos.getY(), targetBlockPos.getZ(), 0.0F, false, Explosion.Mode.NONE);
-                            explosion.explode();
-                        });
-                        break;
-                    case 2:
-                        CreeperEntity creeper = new CreeperEntity(EntityType.CREEPER, world);
-                        creeper.setPos(pos.x, pos.y, pos.z);
-                        world.addFreshEntity(creeper);
-                        creeper.ignite();
-                        break;
-                    case 1:
-                    default:
-                        world.explode(standEntity, pos.x, pos.y + 0.5f, pos.z, 1.0f, false, Explosion.Mode.NONE);
-                        break;
+                        case 1:
+                            // Explosão padrão do mundo
+                            world.explode(standEntity, pos.x, pos.y, pos.z, 2.0f, false, Explosion.Mode.BREAK);
+                            break;
+
+                        case 2:
+                            // Criar um Creeper e explodir
+                            CreeperEntity creeper = new CreeperEntity(EntityType.CREEPER, world);
+                            creeper.setPos(pos.x, pos.y, pos.z);
+                            world.addFreshEntity(creeper);
+                            creeper.ignite(); // Aciona a explosão do Creeper
+                            break;
+                    }
                 }
             }
         }
     }
 
     @Override
-    public IFormattableTextComponent getTranslatedName(IStandPower power, String key) {
-        LivingEntity user = power.getUser();
-        if (nameOfTarget != null) {
-            return new TranslationTextComponent(key, nameOfTarget);
-        } else {
-            return new TranslationTextComponent(key, new TranslationTextComponent("rotp_wou.explosion.nothing"));
+    public boolean greenSelection(IStandPower power, ActionConditionResult conditionCheck) {
+        return false;
+    }
+
+    // Método auxiliar para encontrar o alvo mais próximo
+    private LivingEntity getTargetEntity(WonderOfYouEntity standEntity) {
+        // Obtém o vetor de direção para onde o Stand está olhando
+        Vector3d lookDirection = standEntity.getLookAngle();
+
+        // Obtém a posição atual do Stand
+        Vector3d standPosition = standEntity.position();
+
+        // Define o alcance máximo de detecção (por exemplo, 10 blocos)
+        double maxDistance = 10.0;
+
+        // Calcula a posição final da linha de visão
+        Vector3d lookEndPosition = standPosition.add(lookDirection.x * maxDistance, lookDirection.y * maxDistance, lookDirection.z * maxDistance);
+
+        // Encontra as entidades dentro de um "raio" ao longo da linha de visão
+        List<LivingEntity> entitiesInSight = standEntity.level.getEntitiesOfClass(LivingEntity.class,
+                new AxisAlignedBB(standPosition, lookEndPosition).inflate(1.0D)); // Um pequeno "raio" de 1 bloco para garantir que as entidades próximas sejam detectadas
+
+        for (LivingEntity entity : entitiesInSight) {
+            if (entity != standEntity) { // Garante que o Stand não seja o alvo
+                return entity; // Retorna a primeira entidade encontrada
+            }
         }
+
+        return null; // Retorna null caso não haja entidades na linha de visão
     }
 }

@@ -18,7 +18,6 @@ import com.github.standobyte.jojo.util.mod.StoryPart;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 
-
 public class InitStands {
     @SuppressWarnings("unchecked")
     public static final DeferredRegister<Action<?>> ACTIONS = DeferredRegister.create(
@@ -56,14 +55,13 @@ public class InitStands {
             () -> new CalamityPassive(new CalamityPassive.Builder()
                     .holdToFire(20, false)
                     .staminaCost(75)
-                    //.standSound(StandEntityAction.Phase.WINDUP , InitSounds.CALAMITY)
                     .partsRequired(StandPart.MAIN_BODY)));
 
     public static final RegistryObject<CalamityActive> CALAMITY_ACTIVE = ACTIONS.register("calamity_active",
             () -> new CalamityActive(new CalamityActive.Builder()
                     .holdToFire(20, false)
                     .staminaCost(200)
-                    //.standSound(StandEntityAction.Phase.WINDUP , InitSounds.CALAMITY)
+                    .staminaCostTick(10)
                     .partsRequired(StandPart.MAIN_BODY)));
 
     public static final RegistryObject<LightningStrike> LIGHTNING_STRIKE = ACTIONS.register("lightning_strike",
@@ -85,7 +83,7 @@ public class InitStands {
             new EntityStandRegistryObject<>("wonder_of_you",
                     STANDS,
                     () -> new EntityStandType.Builder<>()
-                            .color(0x614208)
+                            .color(0x210314)
                             .storyPartName(StoryPart.JOJOLION.getName())
                             .leftClickHotbar(
                                     PUNCH.get(),
@@ -98,7 +96,7 @@ public class InitStands {
                                     CALAMITY_ACTIVE.get()
                             )
                             .defaultStats(StandStats.class, new StandStats.Builder()
-                                    .power(12)
+                                    .power(16)
                                     .speed(9)
                                     .range(10000, 10000)
                                     .durability(9)
