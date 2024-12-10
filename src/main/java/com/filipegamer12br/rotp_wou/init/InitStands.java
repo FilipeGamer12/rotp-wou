@@ -1,6 +1,7 @@
 package com.filipegamer12br.rotp_wou.init;
 
 import com.filipegamer12br.rotp_wou.action.LightningStrike;
+import com.filipegamer12br.rotp_wou.action.TNTDrop;
 import com.github.standobyte.jojo.action.Action;
 import com.github.standobyte.jojo.action.stand.*;
 import com.github.standobyte.jojo.entity.stand.StandEntityType;
@@ -70,8 +71,15 @@ public class InitStands {
             () -> new LightningStrike(new LightningStrike.Builder()
                     .holdToFire(30, false) // Segurar por 5 ticks
                     .staminaCost(50) // Consome 50 de estamina
-                    //.standSound(InitSounds.CALAMITY) // Som associado à habilidade
+                    //.standSound(InitSounds.CALAMITY)
                     .partsRequired(StandPart.ARMS))); // Parte necessária para executar a habilidade
+
+    public static final RegistryObject<TNTDrop> TNT_DROP = ACTIONS.register("explosion",
+            () -> new TNTDrop(new TNTDrop.Builder()
+                    .shiftVariationOf(LIGHTNING_STRIKE)
+                    .holdToFire(30, false)
+                    .staminaCost(50)
+                    .partsRequired(StandPart.MAIN_BODY)));
 
 
     public static final EntityStandRegistryObject<EntityStandType<StandStats>, StandEntityType<WonderOfYouEntity>> WONDER_OF_YOU =
