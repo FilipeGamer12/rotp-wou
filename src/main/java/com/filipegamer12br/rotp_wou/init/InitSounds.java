@@ -29,8 +29,17 @@ public class InitSounds {
     
     public static final Supplier<SoundEvent> BARRAGE = ModSounds.STAND_PUNCH_LIGHT;
 
-    public static final RegistryObject<SoundEvent> CALAMITY = SOUNDS.register("calamity",
-            () -> new SoundEvent(new ResourceLocation(WonderOfYouAddon.MOD_ID, "calamity")));
+    public static final RegistryObject<SoundEvent> CALAMITY1 = SOUNDS.register("calamity1",
+            () -> new SoundEvent(new ResourceLocation(WonderOfYouAddon.MOD_ID, "calamity1"))); // summon
+
+    public static final RegistryObject<SoundEvent> CALAMITY2 = SOUNDS.register("calamity2",
+            () -> new SoundEvent(new ResourceLocation(WonderOfYouAddon.MOD_ID, "calamity2"))); // calamity passive
+
+    public static final RegistryObject<SoundEvent> CALAMITY3 = SOUNDS.register("calamity3",
+            () -> new SoundEvent(new ResourceLocation(WonderOfYouAddon.MOD_ID, "calamity3"))); // calamity active
+
+    public static final RegistryObject<SoundEvent> CALAMITY4 = SOUNDS.register("calamity4",
+            () -> new SoundEvent(new ResourceLocation(WonderOfYouAddon.MOD_ID, "calamity4"))); // lightning and explosion
     
     public static final OstSoundList WOU_OST = new OstSoundList(
             new ResourceLocation(WonderOfYouAddon.MOD_ID, "rotp_wou_ost"), SOUNDS);

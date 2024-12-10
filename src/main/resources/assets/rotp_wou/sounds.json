@@ -1,8 +1,35 @@
 {
-  "calamity": {
+  "calamity1": {
     "sounds": [
       {
-        "name": "rotp_wou:calamity",
+        "name": "rotp_wou:calamity1",
+        "stream": true,
+        "preload": true
+      }
+    ]
+  },
+  "calamity2": {
+    "sounds": [
+      {
+        "name": "rotp_wou:calamity2",
+        "stream": true,
+        "preload": true
+      }
+    ]
+  },
+  "calamity3": {
+    "sounds": [
+      {
+        "name": "rotp_wou:calamity3",
+        "stream": true,
+        "preload": true
+      }
+    ]
+  },
+  "calamity4": {
+    "sounds": [
+      {
+        "name": "rotp_wou:calamity4",
         "stream": true,
         "preload": true
       }

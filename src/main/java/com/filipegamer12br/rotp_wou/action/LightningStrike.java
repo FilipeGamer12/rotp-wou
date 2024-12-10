@@ -1,5 +1,6 @@
 package com.filipegamer12br.rotp_wou.action;
 
+import com.filipegamer12br.rotp_wou.init.InitSounds;
 import com.github.standobyte.jojo.action.ActionTarget;
 import com.github.standobyte.jojo.action.ActionTarget.TargetType;
 import com.github.standobyte.jojo.action.stand.StandEntityAction;
@@ -27,6 +28,7 @@ public class LightningStrike extends StandEntityAction {
             Vector3d pos = target.getLocation();
             if (pos != null) {
                 // Invoca o raio no local
+                standEntity.playSound(InitSounds.CALAMITY4.get(), 1F, 1);
                 LightningBoltEntity bolt = EntityType.LIGHTNING_BOLT.create(world);
                 bolt.moveTo(pos);
                 if (userPower.getUser() instanceof ServerPlayerEntity) {

@@ -29,7 +29,7 @@ public class CalamityPassive extends StandEntityAction {
                 wouEntity.setIsCalamityPassiveEnabled(!wouEntity.isCalamityPassiveEnabled());
 
                 if (wouEntity.isCalamityPassiveEnabled()) {
-                    standEntity.playSound(InitSounds.CALAMITY.get(), 0.3F, 1);
+                    standEntity.playSound(InitSounds.CALAMITY2.get(), 1F, 1);
                 }
                 System.out.println("Calamity Passive: " + wouEntity.isCalamityPassiveEnabled());
             }

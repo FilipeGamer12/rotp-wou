@@ -101,7 +101,7 @@ public class InitStands {
                                     .durability(9)
                                     .precision(14)
                                     .build())
-                            .addSummonShout(InitSounds.CALAMITY)
+                            .addSummonShout(InitSounds.CALAMITY1)
                             .addOst(InitSounds.WOU_OST)
                             .build(),
 

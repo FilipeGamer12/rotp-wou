@@ -1,6 +1,7 @@
 package com.filipegamer12br.rotp_wou.action;
 
 import com.filipegamer12br.rotp_wou.entity.WonderOfYouEntity;
+import com.filipegamer12br.rotp_wou.init.InitSounds;
 import com.github.standobyte.jojo.action.ActionConditionResult;
 import com.github.standobyte.jojo.action.ActionTarget;
 import com.github.standobyte.jojo.action.stand.StandEntityAction;
@@ -47,6 +48,7 @@ public class ExplodeVariations extends StandEntityAction {
                 // Obtém a posição do alvo (onde o Stand está mirando)
                 Vector3d pos = target.getLocation();
                 if (pos != null) {
+                    standEntity.playSound(InitSounds.CALAMITY4.get(), 1F, 1);
                     // Verifica o tipo de explosão a ser gerada
                     Random random = new Random();
                     switch (random.nextInt(3)) {
