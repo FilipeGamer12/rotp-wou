@@ -23,7 +23,7 @@ public class CalamityActive extends StandEntityAction {
                 // Ativa a habilidade "Calamity Active"
                 wouEntity.setIsCalamityActiveEnabled(!wouEntity.isCalamityActiveEnabled());
                 if(wouEntity.isCalamityActiveEnabled()){ // Special thanks to Hoo
-                    standEntity.playSound(InitSounds.CALAMITY.get(),1F,1);
+                    standEntity.playSound(InitSounds.CALAMITY.get(),0.3F,1);
                 }
                 System.out.println("Calamity Active: " + wouEntity.isCalamityActiveEnabled());
             }
