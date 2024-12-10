@@ -1,6 +1,7 @@
 package com.filipegamer12br.rotp_wou.action;
 
 import com.filipegamer12br.rotp_wou.entity.WonderOfYouEntity;
+import com.filipegamer12br.rotp_wou.init.InitSounds;
 import com.github.standobyte.jojo.action.ActionConditionResult;
 import com.github.standobyte.jojo.action.stand.StandEntityAction;
 import com.github.standobyte.jojo.entity.stand.StandEntity;
@@ -19,8 +20,10 @@ public class CalamityPassive extends StandEntityAction {
         if (!world.isClientSide()) {
             WonderOfYouEntity wouEntity = (WonderOfYouEntity) standEntity;
             if (wouEntity != null){
-                System.out.println(wouEntity.isCalamityPassiveEnabled());
                 wouEntity.setIsCalamityPassiveEnabled(!wouEntity.isCalamityPassiveEnabled());
+                if(wouEntity.isCalamityPassiveEnabled()){ // Special thanks to Hoo
+                    standEntity.playSound(InitSounds.CALAMITY.get(),1F,1);
+                }
                 System.out.println(wouEntity.isCalamityPassiveEnabled());
             }
         }

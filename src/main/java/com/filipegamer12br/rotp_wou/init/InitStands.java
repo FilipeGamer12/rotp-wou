@@ -57,14 +57,14 @@ public class InitStands {
             () -> new CalamityPassive(new CalamityPassive.Builder()
                     .holdToFire(20, false)
                     .staminaCost(75)
-                    .standSound(InitSounds.CALAMITY)
+                    //.standSound(StandEntityAction.Phase.WINDUP , InitSounds.CALAMITY)
                     .partsRequired(StandPart.MAIN_BODY)));
 
     public static final RegistryObject<CalamityActive> CALAMITY_ACTIVE = ACTIONS.register("calamity_active",
             () -> new CalamityActive(new CalamityActive.Builder()
                     .holdToFire(20, false)
                     .staminaCost(200)
-                    .standSound(InitSounds.CALAMITY)
+                    //.standSound(StandEntityAction.Phase.WINDUP , InitSounds.CALAMITY)
                     .partsRequired(StandPart.MAIN_BODY)));
 
     public static final RegistryObject<LightningStrike> LIGHTNING_STRIKE = ACTIONS.register("lightning_strike",

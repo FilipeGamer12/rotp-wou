@@ -1,6 +1,7 @@
 package com.filipegamer12br.rotp_wou.action;
 
 import com.filipegamer12br.rotp_wou.entity.WonderOfYouEntity;
+import com.filipegamer12br.rotp_wou.init.InitSounds;
 import com.github.standobyte.jojo.action.ActionConditionResult;
 import com.github.standobyte.jojo.action.stand.StandEntityAction;
 import com.github.standobyte.jojo.entity.stand.StandEntity;
@@ -21,6 +22,9 @@ public class CalamityActive extends StandEntityAction {
             if (wouEntity != null) {
                 // Ativa a habilidade "Calamity Active"
                 wouEntity.setIsCalamityActiveEnabled(!wouEntity.isCalamityActiveEnabled());
+                if(wouEntity.isCalamityActiveEnabled()){ // Special thanks to Hoo
+                    standEntity.playSound(InitSounds.CALAMITY.get(),1F,1);
+                }
                 System.out.println("Calamity Active: " + wouEntity.isCalamityActiveEnabled());
             }
         }
