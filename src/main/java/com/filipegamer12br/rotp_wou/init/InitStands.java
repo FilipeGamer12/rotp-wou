@@ -66,14 +66,14 @@ public class InitStands {
 
     public static final RegistryObject<LightningStrike> LIGHTNING_STRIKE = ACTIONS.register("lightning_strike",
             () -> new LightningStrike(new LightningStrike.Builder()
-                    .holdToFire(20, false)
+                    .holdToFire(15, false)
                     .staminaCost(50) // Consome 50 de stamina
                     .partsRequired(StandPart.ARMS))); // Parte necessária para executar a habilidade
 
     public static final RegistryObject<ExplodeVariations> TNT_DROP = ACTIONS.register("explosion",
             () -> new ExplodeVariations(new ExplodeVariations.Builder()
                     .shiftVariationOf(LIGHTNING_STRIKE)
-                    .holdToFire(30, false)
+                    .holdToFire(20, false)
                     .staminaCost(50)
                     .partsRequired(StandPart.MAIN_BODY)));
 
@@ -95,8 +95,8 @@ public class InitStands {
                                     CALAMITY_ACTIVE.get()
                             )
                             .defaultStats(StandStats.class, new StandStats.Builder()
-                                    .power(17)
-                                    .speed(9)
+                                    .power(18)
+                                    .speed(8)
                                     .range(10000, 10000)
                                     .durability(9)
                                     .precision(14)
