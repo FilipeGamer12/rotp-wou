@@ -7,7 +7,6 @@ import com.github.standobyte.jojo.action.stand.StandEntityAction;
 import com.github.standobyte.jojo.entity.stand.StandEntity;
 import com.github.standobyte.jojo.entity.stand.StandEntityTask;
 import com.github.standobyte.jojo.power.impl.stand.IStandPower;
-
 import net.minecraft.world.World;
 
 public class CalamityActive extends StandEntityAction {
@@ -20,7 +19,6 @@ public class CalamityActive extends StandEntityAction {
         if (!world.isClientSide()) {
             WonderOfYouEntity wouEntity = (WonderOfYouEntity) standEntity;
             if (wouEntity != null) {
-                // Ativa a habilidade "Calamity Active"
                 wouEntity.setIsCalamityActiveEnabled(!wouEntity.isCalamityActiveEnabled());
                 if(wouEntity.isCalamityActiveEnabled()){ // Special thanks to Hoo
                     standEntity.playSound(InitSounds.CALAMITY.get(),0.3F,1);

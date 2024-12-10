@@ -1,7 +1,11 @@
 package com.filipegamer12br.rotp_wou.init;
 
+import com.filipegamer12br.rotp_wou.WonderOfYouAddon;
+import com.filipegamer12br.rotp_wou.action.CalamityActive;
+import com.filipegamer12br.rotp_wou.action.CalamityPassive;
+import com.filipegamer12br.rotp_wou.action.ExplodeVariations;
 import com.filipegamer12br.rotp_wou.action.LightningStrike;
-import com.filipegamer12br.rotp_wou.action.TNTDrop;
+import com.filipegamer12br.rotp_wou.entity.WonderOfYouEntity;
 import com.github.standobyte.jojo.action.Action;
 import com.github.standobyte.jojo.action.stand.*;
 import com.github.standobyte.jojo.entity.stand.StandEntityType;
@@ -10,11 +14,6 @@ import com.github.standobyte.jojo.power.impl.stand.StandInstance.StandPart;
 import com.github.standobyte.jojo.power.impl.stand.stats.StandStats;
 import com.github.standobyte.jojo.power.impl.stand.type.EntityStandType;
 import com.github.standobyte.jojo.power.impl.stand.type.StandType;
-import com.filipegamer12br.rotp_wou.WonderOfYouAddon;
-import com.filipegamer12br.rotp_wou.action.CalamityPassive;
-import com.filipegamer12br.rotp_wou.action.CalamityActive;
-import com.filipegamer12br.rotp_wou.entity.WonderOfYouEntity;
-
 import com.github.standobyte.jojo.util.mod.StoryPart;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -50,8 +49,8 @@ public class InitStands {
                     .punchSound(InitSounds.PUNCH_HEAVY)
                     .partsRequired(StandPart.ARMS)));
 
-    public static final RegistryObject<StandEntityAction> STAND_BLOCK = ACTIONS.register("wou_block",
-            () -> new StandEntityBlock());
+    public static final RegistryObject<StandEntityAction> BLOCK = ACTIONS.register("block",
+            StandEntityBlock::new);
 
     public static final RegistryObject<CalamityPassive> CALAMITY_PASSIVE = ACTIONS.register("calamity_passive",
             () -> new CalamityPassive(new CalamityPassive.Builder()
@@ -74,8 +73,8 @@ public class InitStands {
                     //.standSound(InitSounds.CALAMITY)
                     .partsRequired(StandPart.ARMS))); // Parte necessária para executar a habilidade
 
-    public static final RegistryObject<TNTDrop> TNT_DROP = ACTIONS.register("explosion",
-            () -> new TNTDrop(new TNTDrop.Builder()
+    public static final RegistryObject<ExplodeVariations> TNT_DROP = ACTIONS.register("explosion",
+            () -> new ExplodeVariations(new ExplodeVariations.Builder()
                     .shiftVariationOf(LIGHTNING_STRIKE)
                     .holdToFire(30, false)
                     .staminaCost(50)
@@ -94,17 +93,16 @@ public class InitStands {
                                     LIGHTNING_STRIKE.get()
                             )
                             .rightClickHotbar(
-                                    STAND_BLOCK.get(),
+                                    BLOCK.get(),
                                     CALAMITY_PASSIVE.get(),
                                     CALAMITY_ACTIVE.get()
                             )
                             .defaultStats(StandStats.class, new StandStats.Builder()
-                                    .tier(6)
-                                    .power(20)
-                                    .speed(20)
+                                    .power(12)
+                                    .speed(9)
                                     .range(10000, 10000)
-                                    .durability(20)
-                                    .precision(20)
+                                    .durability(9)
+                                    .precision(14)
                                     .build())
                             .addSummonShout(InitSounds.CALAMITY)
                             .addOst(InitSounds.WOU_OST)

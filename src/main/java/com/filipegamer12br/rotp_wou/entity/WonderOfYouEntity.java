@@ -2,7 +2,6 @@ package com.filipegamer12br.rotp_wou.entity;
 
 import com.github.standobyte.jojo.entity.stand.StandEntity;
 import com.github.standobyte.jojo.entity.stand.StandEntityType;
-
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -21,11 +20,10 @@ public class WonderOfYouEntity extends StandEntity {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        entityData.define(IS_CALAMITY_PASSIVE_ENABLED, false);  // Inicializa como desativado
-        entityData.define(IS_CALAMITY_ACTIVE_ENABLED, false);    // Inicializa como desativado
+        entityData.define(IS_CALAMITY_PASSIVE_ENABLED, false);
+        entityData.define(IS_CALAMITY_ACTIVE_ENABLED, false);
     }
 
-    // Habilidade Calamity Passive
     public boolean isCalamityPassiveEnabled() {
         return entityData.get(IS_CALAMITY_PASSIVE_ENABLED);
     }
@@ -34,7 +32,6 @@ public class WonderOfYouEntity extends StandEntity {
         entityData.set(IS_CALAMITY_PASSIVE_ENABLED, status);
     }
 
-    // Habilidade Calamity Active
     public boolean isCalamityActiveEnabled() {
         return entityData.get(IS_CALAMITY_ACTIVE_ENABLED);
     }

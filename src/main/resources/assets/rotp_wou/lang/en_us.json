@@ -1,10 +1,17 @@
 {
   "entity.rotp_wou.wonder_of_you": "Wonder Of You",
   "stand.rotp_wou.wonder_of_you": "Wonder Of You",
+
   "action.rotp_wou.punch": "Punch",
   "action.rotp_wou.heavy_punch": "Heavy Punch",
   "action.rotp_wou.finisher_punch": "Finisher",
   "action.rotp_wou.barrage": "Barrage",
   "action.rotp_wou.block": "Block",
-  "entity.rotp_wou.calamity": "Calamity"
+  "action.rotp_wou.calamity_passive": "Calamity: Passive",
+  "action.rotp_wou.calamity_active": "Calamity: Active",
+  "action.rotp_wou.explosion": "Explode %s",
+  "action.rotp_wou.lightning_strike": "Lightning Strike",
+
+  "rotp_wou.explosion.nothing": "Nothing"
+
 }
