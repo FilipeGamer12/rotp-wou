@@ -34,5 +34,14 @@
         "preload": true
       }
     ]
+  },
+  "WOU_OST": {
+    "sounds": [
+      {
+        "name": "rotp_wou:calamity4",
+        "stream": true,
+        "preload": true
+      }
+    ]
   }
 }
