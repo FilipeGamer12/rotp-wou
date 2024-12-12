@@ -68,7 +68,7 @@ public class InitStands {
             () -> new LightningStrike(new LightningStrike.Builder()
                     .holdToFire(15, false)
                     .staminaCost(50) // Consome 50 de stamina
-                    .partsRequired(StandPart.ARMS))); // Parte necessária para executar a habilidade
+                    .partsRequired(StandPart.MAIN_BODY))); // Parte necessária para executar a habilidade
 
     public static final RegistryObject<ExplodeVariations> TNT_DROP = ACTIONS.register("explosion",
             () -> new ExplodeVariations(new ExplodeVariations.Builder()
