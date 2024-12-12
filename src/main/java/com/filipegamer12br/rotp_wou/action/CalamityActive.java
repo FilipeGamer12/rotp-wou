@@ -42,4 +42,24 @@ public class CalamityActive extends StandEntityAction {
         }
         return false;
     }
+
+    // Método para drenagem de stamina
+    public static void drainStamina(IStandPower userPower) {
+        if (userPower != null && userPower.getMaxStamina() > 0) {
+            // Drena 2 de stamina por tick
+            float staminaDrain = 2.0F;
+            if (userPower.getStamina() >= staminaDrain) {
+                userPower.consumeStamina(staminaDrain);
+            } else {
+                // Caso o usuário não tenha stamina suficiente, talvez definir a stamina como 0
+                userPower.consumeStamina(userPower.getStamina());  // Drena toda a stamina restante
+            }
+            if (userPower.getStamina() <= 0) {
+                if (userPower.getStandManifestation() instanceof WonderOfYouEntity) {
+                    WonderOfYouEntity wouEntity = (WonderOfYouEntity) userPower.getStandManifestation();
+                    wouEntity.setIsCalamityActiveEnabled(false); // Desativa CalamityActive
+                }
+            }
+        }
+    }
 }

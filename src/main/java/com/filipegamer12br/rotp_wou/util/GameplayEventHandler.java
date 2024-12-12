@@ -1,5 +1,11 @@
 package com.filipegamer12br.rotp_wou.util;
 
+import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.World;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.ProjectileImpactEvent.Arrow;
 import com.filipegamer12br.rotp_wou.WonderOfYouAddon;
 import com.filipegamer12br.rotp_wou.entity.WonderOfYouEntity;
 import com.filipegamer12br.rotp_wou.init.InitStands;
@@ -10,10 +16,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
+import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import static com.filipegamer12br.rotp_wou.action.CalamityActive.drainStamina;
 
 @Mod.EventBusSubscriber(modid = WonderOfYouAddon.MOD_ID)
 public class GameplayEventHandler {
@@ -99,6 +108,57 @@ public class GameplayEventHandler {
                             // Reduz o dano recebido pelo usuário para 15% do valor original
                             float originalDamage = event.getAmount();
                             event.setAmount(originalDamage * 0.15F); // 15% do dano original
+                        }
+                    }
+                }
+            });
+        }
+    }
+    @SubscribeEvent
+    public static void onProjectileImpact(ProjectileImpactEvent event) {
+        // Verifica se o projétil é uma instância de ProjectileEntity (ou seja, qualquer projétil)
+        if (event.getEntity() instanceof ProjectileEntity) {
+            ProjectileEntity projectile = (ProjectileEntity) event.getEntity(); // Faz o cast da entidade para ProjectileEntity
+
+            // Verifica se o projétil atingiu uma entidade
+            if (event.getRayTraceResult().getType() == RayTraceResult.Type.ENTITY) {
+                Entity entityHit = ((EntityRayTraceResult) event.getRayTraceResult()).getEntity();
+
+                // Verifica se a entidade atingida é o alvo com "Wonder of You"
+                if (entityHit instanceof LivingEntity) {
+                    LivingEntity target = (LivingEntity) entityHit;
+
+                    IStandPower.getStandPowerOptional(target).ifPresent(power -> {
+                        if (power.getType() == InitStands.WONDER_OF_YOU.getStandType() && power.isActive()) {
+                            if (power.getStandManifestation() instanceof WonderOfYouEntity) {
+                                WonderOfYouEntity wonderOfYouEntity = (WonderOfYouEntity) power.getStandManifestation();
+                                if (wonderOfYouEntity.isCalamityActiveEnabled()) {
+                                    // Remove o projétil do mundo
+                                    projectile.remove();  // Remover o projétil do mundo
+
+                                    // Cancela o impacto para que o projétil não cause dano
+                                    event.setCanceled(true);
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    }
+    @SubscribeEvent
+    public static void onTick(TickEvent.PlayerTickEvent event) {
+        // Verifica se o jogador está no servidor e se a habilidade CalamityActive está ativada
+        if (!event.player.level.isClientSide()) {
+            IStandPower.getStandPowerOptional(event.player).ifPresent(power -> {
+                if (power.getType() == InitStands.WONDER_OF_YOU.getStandType() && power.isActive()) {
+                    if (power.getStandManifestation() instanceof WonderOfYouEntity) {
+                        WonderOfYouEntity wonderOfYouEntity = (WonderOfYouEntity) power.getStandManifestation();
+
+                        // Verifica se a habilidade CalamityActive está ativa
+                        if (wonderOfYouEntity.isCalamityActiveEnabled()) {
+                            // Drena 2 de stamina por tick
+                            drainStamina(power);
                         }
                     }
                 }

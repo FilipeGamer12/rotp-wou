@@ -59,7 +59,7 @@ public class InitStands {
 
     public static final RegistryObject<CalamityActive> CALAMITY_ACTIVE = ACTIONS.register("calamity_active",
             () -> new CalamityActive(new CalamityActive.Builder()
-                    .holdToFire(20, false)
+                    .holdToFire(30, false)
                     .staminaCost(200)
                     .staminaCostTick(10)
                     .partsRequired(StandPart.MAIN_BODY)));
