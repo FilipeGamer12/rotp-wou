@@ -41,5 +41,6 @@ public class InitSounds {
     public static final RegistryObject<SoundEvent> CALAMITY4 = SOUNDS.register("calamity4",
             () -> new SoundEvent(new ResourceLocation(WonderOfYouAddon.MOD_ID, "calamity4"))); // lightning and explosion
 
-    static final OstSoundList WOU_OST = new OstSoundList(new ResourceLocation(WonderOfYouAddon.MOD_ID, "rotp_wou_ost"), SOUNDS);
+    public static final OstSoundList WOU_OST = new OstSoundList(
+            new ResourceLocation(WonderOfYouAddon.MOD_ID, "wou_ost"), SOUNDS);
 }

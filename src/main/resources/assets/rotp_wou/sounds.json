@@ -38,7 +38,7 @@
   "WOU_OST": {
     "sounds": [
       {
-        "name": "rotp_wou:rotp_wou_ost",
+        "name": "rotp_wou:ost/wou_ost",
         "stream": true,
         "preload": true
       }
