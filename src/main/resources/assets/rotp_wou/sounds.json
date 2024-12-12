@@ -35,12 +35,15 @@
       }
     ]
   },
-  "WOU_OST": {
+  "wou_ost_cassette": {
     "sounds": [
       {
         "name": "rotp_wou:ost/full/wou_ost",
-        "stream": true,
-        "preload": true
+        "type": "event"
+      },
+      {
+        "name": "rotp_wou:ost/full/wou_ost",
+        "stream": true
       }
     ]
   }

@@ -12,6 +12,9 @@
   "action.rotp_wou.explosion": "Explode %s",
   "action.rotp_wou.lightning_strike": "Lightning Strike",
 
-  "rotp_wou.explosion.nothing": "Nothing"
+  "rotp_wou.explosion.nothing": "Nothing",
+
+  "rotp_wou.sounds.ost.full.wou_ost_full.name": "Wonder of You - Elvis x WoU",
+  "rotp_wou.sounds.ost.full.wou_ost_full.name.shortened": "Wonder of You"
 
 }
