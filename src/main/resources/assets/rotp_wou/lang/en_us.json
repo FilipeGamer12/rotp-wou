@@ -14,7 +14,9 @@
 
   "rotp_wou.explosion.nothing": "Nothing",
 
-  "rotp_wou.sounds.ost.full.wou_ost_full.name": "Wonder of You - Elvis x WoU",
-  "rotp_wou.sounds.ost.full.wou_ost_full.name.shortened": "Wonder of You"
+  "rotp_wou.ost.full.wou_ost.name": "Wonder of You - Elvis x WoU",
+  "rotp_wou.ost.full.wou_ost.name.shortened": "Wonder of You",
+  "rotp_wou.ost.full.wou_ost2.name": "ASBR - Calamity is Coming",
+  "rotp_wou.ost.full.wou_ost2.name.shortened": "Calamity is Coming"
 
 }

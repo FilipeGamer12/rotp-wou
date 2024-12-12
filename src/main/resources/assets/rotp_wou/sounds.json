@@ -35,14 +35,22 @@
       }
     ]
   },
-  "wou_ost_cassette": {
+  "wou_ost_full": {
     "sounds": [
       {
         "name": "rotp_wou:ost/full/wou_ost",
+        "stream": true
+      }
+    ]
+  },
+  "wou_ost_cassette": {
+    "sounds": [
+      {
+        "name": "rotp_wou:wou_ost_full",
         "type": "event"
       },
       {
-        "name": "rotp_wou:ost/full/wou_ost",
+        "name": "rotp_wou:ost/full/wou_ost2",
         "stream": true
       }
     ]
