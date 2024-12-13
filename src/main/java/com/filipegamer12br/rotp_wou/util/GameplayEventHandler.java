@@ -1,11 +1,11 @@
 package com.filipegamer12br.rotp_wou.util;
 
+import com.github.standobyte.jojo.entity.stand.StandEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.ProjectileImpactEvent.Arrow;
 import com.filipegamer12br.rotp_wou.WonderOfYouAddon;
 import com.filipegamer12br.rotp_wou.entity.WonderOfYouEntity;
 import com.filipegamer12br.rotp_wou.init.InitStands;
@@ -31,21 +31,47 @@ public class GameplayEventHandler {
     @SubscribeEvent
     public static void onHurtEvent(LivingHurtEvent event) {
         LivingEntity livingEntity = event.getEntityLiving();
+
+        // Certificar-se de que a entidade é válida e estamos no lado do servidor
         if (livingEntity != null && livingEntity.isAlive() && !livingEntity.level.isClientSide()) {
             IStandPower.getStandPowerOptional(livingEntity).ifPresent(power -> {
+                // Verificar se o Stand do Wonder Of U está ativo e passivo habilitado
                 if (power.getType() == InitStands.WONDER_OF_YOU.getStandType() && power.isActive()) {
                     if (power.getStandManifestation() instanceof WonderOfYouEntity) {
                         WonderOfYouEntity wonderOfYouEntity = (WonderOfYouEntity) power.getStandManifestation();
                         if (wonderOfYouEntity.isCalamityPassiveEnabled()) {
                             float damageToOurWOU = event.getAmount();
+                            // Reduzir o dano recebido
                             event.setAmount(damageToOurWOU * 0.15F);
 
+                            // Verificar se o atacante é uma entidade viva
                             if (event.getSource().getEntity() instanceof LivingEntity) {
                                 LivingEntity attacker = (LivingEntity) event.getSource().getEntity();
-                                attacker.hurt(event.getSource(), damageToOurWOU);
-                                attacker.addEffect(new EffectInstance(Effects.POISON, 100, 2, false, false, true)); // Veneno II.
-                                attacker.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 2, false, false, true)); // Lentidão II.
-                                attacker.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 0, false, false, true)); // Cegueira.
+
+                                // Se o atacante for um Stand, então precisamos pegar o usuário do Stand
+                                if (attacker instanceof StandEntity) {
+                                    StandEntity standAttacker = (StandEntity) attacker;
+
+                                    // Acessando o usuário do Stand atacante
+                                    LivingEntity standUser = standAttacker.getUser();  // Método para obter o usuário do Stand
+
+                                    // Verifique se o usuário do Stand é válido
+                                    if (standUser != null) {
+                                        // Aplicar as penalidades ao usuário do Stand adversário
+                                        standUser.hurt(event.getSource(), damageToOurWOU); // Dano ao usuário do Stand
+                                        standUser.addEffect(new EffectInstance(Effects.POISON, 100, 2, false, false, true)); // Veneno II
+                                        standUser.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 2, false, false, true)); // Lentidão II
+                                        standUser.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 0, false, false, true)); // Cegueira
+                                    }
+                                }
+                                // Se o atacante for um PlayerEntity ou MobEntity (não Stand)
+                                else if (attacker instanceof PlayerEntity || attacker instanceof MobEntity) {
+                                    // Aplicar os efeitos ao atacante diretamente
+                                    attacker.hurt(event.getSource(), damageToOurWOU); // Dano ao atacante
+                                    attacker.addEffect(new EffectInstance(Effects.POISON, 100, 2, false, false, true)); // Veneno II
+                                    attacker.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 2, false, false, true)); // Lentidão II
+                                    attacker.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 0, false, false, true)); // Cegueira
+                                }
                             }
                         }
                     }
@@ -64,6 +90,7 @@ public class GameplayEventHandler {
                     if (power.getStandManifestation() instanceof WonderOfYouEntity) {
                         WonderOfYouEntity wonderOfYouEntity = (WonderOfYouEntity) power.getStandManifestation();
                         if (wonderOfYouEntity.isCalamityActiveEnabled()) {
+                            // Aplicar efeitos a entidades próximas
                             for (Entity nearbyEntity : target.level.getEntities(target, target.getBoundingBox().inflate(6.0D))) {
                                 if (nearbyEntity instanceof LivingEntity && nearbyEntity != target) {
                                     LivingEntity livingEntity = (LivingEntity) nearbyEntity;
@@ -71,22 +98,34 @@ public class GameplayEventHandler {
                                     livingEntity.addEffect(new EffectInstance(Effects.BLINDNESS, 60, 0, false, false, true)); // Cegueira
                                 }
                             }
-
+                            // Verificar se o atacante é uma entidade viva
                             if (event.getEntityLiving() instanceof LivingEntity) {
                                 LivingEntity attacker = event.getEntityLiving();
 
-                                DamageSource damageSource;
-                                if (attacker instanceof PlayerEntity) {
-                                    damageSource = DamageSource.playerAttack((PlayerEntity) attacker);
-                                } else {
-                                    damageSource = DamageSource.mobAttack(attacker);
+                                // Verificar se o atacante é um Stand
+                                if (attacker instanceof StandEntity) {
+                                    StandEntity standAttacker = (StandEntity) attacker;
+
+                                    // Acessando o usuário do Stand atacante
+                                    LivingEntity standUser = standAttacker.getUser();  // Método para obter o usuário do Stand
+
+                                    // Verifique se o usuário do Stand é válido
+                                    if (standUser != null) {
+                                        // Aplicar as penalidades ao usuário do Stand adversário
+                                        standUser.hurt(DamageSource.MAGIC, 2.0F); // Dano mágico ao usuário do Stand adversário
+                                        standUser.addEffect(new EffectInstance(Effects.POISON, 100, 1, false, false, true)); // Veneno I
+                                        standUser.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 2, false, false, true)); // Lentidão II
+                                        standUser.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 0, false, false, true)); // Cegueira
+                                    }
                                 }
-
-                                attacker.hurt(damageSource, 2.0F);
-
-                                attacker.addEffect(new EffectInstance(Effects.POISON, 100, 1, false, false, true)); // Veneno I
-                                attacker.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 2, false, false, true)); // Lentidão II
-                                attacker.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 0, false, false, true)); // Cegueira
+                                // Se o atacante for um PlayerEntity ou MobEntity (não Stand)
+                                else if (attacker instanceof PlayerEntity || attacker instanceof MobEntity) {
+                                    // Aplicar os efeitos diretamente ao atacante
+                                    attacker.hurt(DamageSource.MAGIC, 2.0F); // Dano mágico ao atacante
+                                    attacker.addEffect(new EffectInstance(Effects.POISON, 100, 1, false, false, true)); // Veneno I
+                                    attacker.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 2, false, false, true)); // Lentidão II
+                                    attacker.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 0, false, false, true)); // Cegueira
+                                }
                             }
                         }
                     }
@@ -159,6 +198,39 @@ public class GameplayEventHandler {
                         if (wonderOfYouEntity.isCalamityActiveEnabled()) {
                             // Drena 2 de stamina por tick
                             drainStamina(power);
+                        }
+                    }
+                }
+            });
+        }
+    }
+    @SubscribeEvent
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        PlayerEntity player = event.player;
+
+        // Certificar-se de que estamos no lado do servidor
+        if (!player.level.isClientSide()) {
+            IStandPower.getStandPowerOptional(player).ifPresent(power -> {
+                // Verifica se o jogador tem o Stand "Wonder Of You" ativo
+                if (power.getType() == InitStands.WONDER_OF_YOU.getStandType() && power.isActive()) {
+                    if (power.getStandManifestation() instanceof WonderOfYouEntity) {
+                        WonderOfYouEntity wonderOfYouEntity = (WonderOfYouEntity) power.getStandManifestation();
+
+                        // Verifica se a habilidade "CalamityActive" está ativada
+                        if (wonderOfYouEntity.isCalamityActiveEnabled()) {
+                            // Itera sobre todas as entidades próximas
+                            for (Entity nearbyEntity : player.level.getEntities(player, player.getBoundingBox().inflate(6.0D))) {
+                                if (nearbyEntity instanceof PlayerEntity && nearbyEntity != player) {
+                                    PlayerEntity nearbyPlayer = (PlayerEntity) nearbyEntity;
+
+                                    // Aplicar os efeitos negativos
+                                    nearbyPlayer.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 3, false, false, true)); // Lentidão III
+                                    nearbyPlayer.addEffect(new EffectInstance(Effects.BLINDNESS, 60, 0, false, false, true)); // Cegueira
+                                    nearbyPlayer.addEffect(new EffectInstance(Effects.POISON, 100, 1, false, false, true)); // Veneno I
+
+                                    nearbyPlayer.hurt(DamageSource.MAGIC, 0.5F);
+                                }
+                            }
                         }
                     }
                 }
