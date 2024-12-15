@@ -1,16 +1,17 @@
 package com.filipegamer12br.rotp_wou.util;
 
 import com.filipegamer12br.rotp_wou.entity.CarProjectileEntity;
+import com.filipegamer12br.rotp_wou.init.InitEntities;
 import com.github.standobyte.jojo.entity.stand.StandEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
 import com.filipegamer12br.rotp_wou.WonderOfYouAddon;
 import com.filipegamer12br.rotp_wou.entity.WonderOfYouEntity;
@@ -32,6 +33,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.List;
 
 import static com.filipegamer12br.rotp_wou.action.CalamityActive.drainStamina;
+import static sun.audio.AudioPlayer.player;
 
 @Mod.EventBusSubscriber(modid = WonderOfYouAddon.MOD_ID)
 public class GameplayEventHandler {
@@ -248,134 +250,108 @@ public class GameplayEventHandler {
     }
 
     // Car Calamity
+
+
     @SubscribeEvent
     public static void onCarProjectileTick(TickEvent.WorldTickEvent event) {
-        if (!event.world.isClientSide()) {
-            // Iterando sobre todas as entidades no mundo dentro de um raio específico
-            AxisAlignedBB searchArea = new AxisAlignedBB(-50, -50, -50, 50, 50, 50);
-            event.world.getEntitiesOfClass(Entity.class, searchArea).forEach(entity -> {
-                if (entity instanceof CarProjectileEntity) {
-                    CarProjectileEntity carProjectile = (CarProjectileEntity) entity;
+        if (event.world instanceof ServerWorld) {
+            ServerWorld serverWorld = (ServerWorld) event.world;
 
-                    // Verifica se o Stand do jogador está ativo e se a habilidade Calamity está habilitada
-                    if (carProjectile.owner instanceof PlayerEntity) {
-                        PlayerEntity player = (PlayerEntity) carProjectile.owner;
-                        IStandPower.getStandPowerOptional(player).ifPresent(power -> {
-                            if (power.getType() == InitStands.WONDER_OF_YOU.getStandType() && power.isActive()) {
-                                if (power.getStandManifestation() instanceof WonderOfYouEntity) {
-                                    WonderOfYouEntity wouEntity = (WonderOfYouEntity) power.getStandManifestation();
-                                    if (!wouEntity.isCalamityCarAttackEnabled()) {
-                                        return; // Se a habilidade Calamity não estiver ativa, não realiza a ação
-                                    }
-                                }
-                            }
-                        });
-                    }
+            // Obter todas as entidades do tipo CarProjectileEntity
+            List<CarProjectileEntity> carProjectiles = serverWorld.getEntitiesOfClass(
+                    CarProjectileEntity.class,
+                    new AxisAlignedBB(-50, -50, -50, 50, 50, 50)
+            );
 
-                    // Movimento básico (aceleração do projétil)
-                    carProjectile.setDeltaMovement(carProjectile.getDeltaMovement().scale(1.02)); // Aumenta a velocidade
-                    carProjectile.move(MoverType.SELF, carProjectile.getDeltaMovement());
-
-                    LivingEntity target = getTargetEntity(carProjectile);
-
-                    // Aplicar efeitos no alvo
-                    if (target != null) {
-                        // Aplicar imobilização no alvo antes de atingir
-                        target.addEffect(new EffectInstance(new ImmobilizeEffect(0x0000FF), 100, 0, false, false, true)); // Aplicando efeito de imobilização
-
-                        // Verificar a habilidade CalamityAttack
-                        WonderOfYouEntity wouEntity = getStandEntityForPlayer((PlayerEntity) carProjectile.owner);
-                        if (wouEntity != null && wouEntity.isCalamityCarAttackEnabled()) {
-                            // Lógica da habilidade CalamityAttack (causar dano ou efeitos extras)
-                            target.hurt(DamageSource.MAGIC, 5.0F); // Causando dano adicional
-                        }
-                    }
-
-                    // Verificar a colisão e realizar a explosão
-                    AxisAlignedBB aabb = carProjectile.getBoundingBox().inflate(0.5); // Aumenta a área de colisão
-                    event.world.getEntitiesOfClass(LivingEntity.class, aabb).forEach(hitTarget -> {
-                        if (hitTarget != carProjectile.owner && hitTarget.isAlive()) {
-                            Explosion explosion = new Explosion(carProjectile.level, carProjectile, carProjectile.getX(), carProjectile.getY(), carProjectile.getZ(), 4.0F, true, Explosion.Mode.BREAK);
-                            // Aplica o dano de impacto à entidade atingida
-                            hitTarget.hurt(DamageSource.explosion(explosion), 10.0F); // Dano de impacto
-
-                            // Gera a explosão no mundo
-                            event.world.explode(carProjectile, carProjectile.getX(), carProjectile.getY(), carProjectile.getZ(), 4.0F, true, Explosion.Mode.BREAK); // Cria a explosão
-                            carProjectile.remove(); // Remove o projétil após a explosão
-                        }
-                    });
-
-                    // Lógica de explosão automática (5 segundos ou 100 ticks)
-                    if (carProjectile.ticksBeforeExplosion <= 0) {
-                        // Se 5 segundos se passaram ou houve colisão com uma entidade, realiza a explosão
-                        event.world.explode(carProjectile, carProjectile.getX(), carProjectile.getY(), carProjectile.getZ(), 4.0F, true, Explosion.Mode.BREAK);
-                        carProjectile.remove(); // Remove o projétil após a explosão
-                    } else {
-                        carProjectile.ticksBeforeExplosion--; // Decrementa o contador de tempo
-                    }
-                }
-            });
-        }
-    }
-
-    // Método para obter o StandEntity
-    private static WonderOfYouEntity getStandEntityForPlayer(PlayerEntity player) {
-        return IStandPower.getStandPowerOptional(player)
-                .filter(power -> power.getType() == InitStands.WONDER_OF_YOU.getStandType())
-                .map(power -> (WonderOfYouEntity) power.getStandManifestation()) // Alterado para usar `getStandManifestation()`
-                .orElse(null);
-    }
-
-    // Método para obter o alvo do projétil
-    private static LivingEntity getTargetEntity(CarProjectileEntity carProjectile) {
-        Vector3d start = carProjectile.position();
-        final LivingEntity[] targetEntity = new LivingEntity[1];
-
-        for (PlayerEntity player : carProjectile.level.getEntitiesOfClass(PlayerEntity.class, new AxisAlignedBB(-50, -50, -50, 50, 50, 50))) {
-            if (!player.level.isClientSide()) {
-                IStandPower.getStandPowerOptional(player).ifPresent(power -> {
-                    if (power.getType() == InitStands.WONDER_OF_YOU.getStandType() && power.isActive()) {
-                        Vector3d direction = player.getLookAngle();
-                        RayTraceResult result = carProjectile.level.clip(new RayTraceContext(start, start.add(direction.scale(100)), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, carProjectile));
-
-                        if (result.getType() == RayTraceResult.Type.ENTITY) {
-                            targetEntity[0] = (LivingEntity) ((EntityRayTraceResult) result).getEntity();
-                        }
-                    }
-                });
+            for (CarProjectileEntity carProjectile : carProjectiles) {
+                handleCarProjectile(carProjectile, serverWorld);
             }
         }
-
-        return targetEntity[0];
     }
 
-    @SubscribeEvent
-    public static void onCarImpact(ProjectileImpactEvent event) {
-        if (event.getEntity() instanceof CarProjectileEntity) {
-            CarProjectileEntity carProjectile = (CarProjectileEntity) event.getEntity();
+    private static void handleCarProjectile(CarProjectileEntity carProjectile, ServerWorld world) {
+        // Verificar se o carro ainda está em movimento
+        if (carProjectile.owner != null) {
+            // Acelerar o movimento em direção ao alvo
+            Vector3d direction = getDirectionToTarget(carProjectile, world);
+            carProjectile.setDeltaMovement(carProjectile.getDeltaMovement().add(direction.scale(0.05))); // Aceleração
 
-            if (event.getRayTraceResult().getType() == RayTraceResult.Type.ENTITY) {
-                Entity targetEntity = ((EntityRayTraceResult) event.getRayTraceResult()).getEntity();
+            // Movimenta o carro
+            carProjectile.move(MoverType.SELF, carProjectile.getDeltaMovement());
 
-                // Se o alvo for uma entidade viva
-                if (targetEntity instanceof LivingEntity) {
-                    LivingEntity target = (LivingEntity) targetEntity;
+            // Verificar colisão com entidades
+            AxisAlignedBB aabb = carProjectile.getBoundingBox().inflate(0.5);
+            List<LivingEntity> hitEntities = world.getEntitiesOfClass(LivingEntity.class, aabb, entity -> entity != carProjectile.owner);
 
-                    // Aplicar efeito de imobilização no alvo
-                    target.addEffect(new EffectInstance(new ImmobilizeEffect(0x0000FF), 100, 0, false, false, true)); // Efeito de imobilização
-
-                    // Verificar se a habilidade CalamityAttack está ativa e aplicar o efeito
-                    WonderOfYouEntity wouEntity = getStandEntityForPlayer((PlayerEntity) carProjectile.owner);
-                    if (wouEntity != null && wouEntity.isCalamityCarAttackEnabled()) {
-                        // Lógica da habilidade CalamityAttack (exemplo de causar dano extra ou efeitos)
-                        target.hurt(DamageSource.MAGIC, 5.0F); // Causando dano adicional
-                    }
-
-                    // Realizar a explosão
-                    carProjectile.level.explode(carProjectile, carProjectile.getX(), carProjectile.getY(), carProjectile.getZ(), 4.0F, true, Explosion.Mode.BREAK);
-                    carProjectile.remove(); // Remove o projétil após a explosão
+            for (LivingEntity hitEntity : hitEntities) {
+                if (hitEntity.isAlive()) {
+                    applyCarImpactEffects(carProjectile, hitEntity);
+                    createExplosion(carProjectile, world);
+                    carProjectile.remove();
+                    return;
                 }
             }
         }
+    }
+
+    private static void applyCarImpactEffects(CarProjectileEntity carProjectile, LivingEntity target) {
+        // Aplica o efeito de imobilização (stun) no alvo
+        target.addEffect(new EffectInstance(new ImmobilizeEffect(0x0000FF), 100, 0, false, false, true));
+
+        // Se a habilidade Calamity estiver ativa, causar dano adicional
+        WonderOfYouEntity wouEntity = getStandEntityForPlayer(carProjectile.owner);
+        if (wouEntity != null && wouEntity.isCalamityCarAttackEnabled()) {
+            target.hurt(DamageSource.MAGIC, 5.0F); // Dano adicional
+        }
+    }
+
+    private static WonderOfYouEntity getStandEntityForPlayer(Entity owner) {
+        if (owner instanceof PlayerEntity) {
+            return IStandPower.getStandPowerOptional((PlayerEntity) owner)
+                    .filter(power -> power.getType() == InitStands.WONDER_OF_YOU.getStandType())
+                    .map(power -> (WonderOfYouEntity) power.getStandManifestation())
+                    .orElse(null);
+        }
+        return null;
+    }
+
+    private static void createExplosion(CarProjectileEntity carProjectile, ServerWorld world) {
+        // Cria a explosão no local do carro
+        world.explode(
+                carProjectile,
+                carProjectile.getX(),
+                carProjectile.getY(),
+                carProjectile.getZ(),
+                4.0F,
+                Explosion.Mode.NONE
+        );
+    }
+
+    private static Vector3d getDirectionToTarget(CarProjectileEntity carProjectile, ServerWorld world) {
+        // A posição do alvo (último alvo do jogador dono do carro)
+        if (carProjectile.owner instanceof LivingEntity) {
+            LivingEntity livingOwner = (LivingEntity) carProjectile.owner;
+            LivingEntity target = livingOwner.getLastHurtMob(); // Agora você pode acessar o método
+            if (target != null && target.isAlive()) {
+                // Aplicar efeitos de impacto no alvo
+                spawnCarAndStunTarget(world, target, livingOwner); // Chamar o método para tratar o stun
+            }
+
+            // Calcula a direção do carro para o alvo
+            Vector3d targetPosition = (target != null && target.isAlive()) ? target.position() : carProjectile.position();
+            return targetPosition.subtract(carProjectile.position()).normalize(); // Normaliza a direção para garantir que o carro se mova em linha reta
+        }
+        return Vector3d.ZERO; // Retorna uma direção nula se não houver dono ou alvo
+    }
+
+    private static void spawnCarAndStunTarget(ServerWorld world, LivingEntity target, LivingEntity owner) {
+        // Aqui você pode adicionar a lógica de spawn do carro e aplicar o efeito de stun
+        target.addEffect(new EffectInstance(new ImmobilizeEffect(0x0000FF), 100, 0, false, false, true));
+
+        // Spawn da entidade CarProjectileEntity
+        CarProjectileEntity carProjectile = new CarProjectileEntity(InitEntities.CAR_PROJECTILE.get(), world);
+        carProjectile.setOwner(owner); // Define o dono do carro como o jogador ou entidade controladora
+        carProjectile.setPos(target.getX(), target.getY(), target.getZ()); // Define a posição inicial do carro próximo ao alvo
+        world.addFreshEntity(carProjectile); // Adiciona a entidade no mundo
     }
 }

@@ -1,7 +1,6 @@
 package com.filipegamer12br.rotp_wou.entity;
 
 import javax.annotation.Nullable;
-
 import com.filipegamer12br.rotp_wou.init.InitEntities;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -9,22 +8,20 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.network.IPacket;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import java.util.UUID;
 
-import static net.minecraft.world.Explosion.Mode.BREAK;
-
 public class CarProjectileEntity extends Entity {
 
-    public int ticksBeforeExplosion = 100; // Tempo até a explosão (100 ticks).
     @Nullable
     public Entity owner;
     @Nullable
     public UUID ownerId;
+    @Nullable
+    private LivingEntity target; // O alvo da colisão do carro
 
     public CarProjectileEntity(World world) {
         this(InitEntities.CAR_PROJECTILE.get(), world);
@@ -43,46 +40,18 @@ public class CarProjectileEntity extends Entity {
     public void tick() {
         super.tick();
 
-        // Movimento básico da entidade
-        move(MoverType.SELF, getDeltaMovement());
-
-        // Explosão baseada em tempo
-        if (ticksBeforeExplosion > 0) {
-            ticksBeforeExplosion--;
-        } else {
-            explode(); // Explodir quando o tempo de contagem chega a zero
-            remove();  // Remover a entidade após a explosão
-        }
-
-        // Verificar se o dono se afastou muito e explodir
-        if (owner != null && distanceToSqr(owner) > 100) {
-            explode();
-            remove();
-        }
-
-        // Aplicar dano a entidades próximas quando o tempo da explosão estiver baixo
-        if (ticksBeforeExplosion <= 20) {
-            applyDamageToNearbyEntities();
-        }
-    }
-
-    // Método para aplicar dano a entidades próximas
-    private void applyDamageToNearbyEntities() {
-        DamageSource damageSource = DamageSource.MAGIC; // A fonte de dano pode ser personalizada
-        float damage = 5.0F; // O dano pode ser ajustado
-
-        // Obtendo as entidades próximas
-        AxisAlignedBB aabb = getBoundingBox().inflate(6.0D); // O alcance de efeito pode ser ajustado
-        level.getEntitiesOfClass(LivingEntity.class, aabb, entity -> entity != owner).forEach(entity -> {
-            if (!entity.isInvulnerableTo(damageSource)) {
-                entity.hurt(damageSource, damage); // Aplicar o dano
+        if (owner != null) {
+            if (owner instanceof LivingEntity) {
+                target = ((LivingEntity) owner).getLastHurtMob(); // Definir o alvo como o último mob atacado
             }
-        });
-    }
 
-    // Método para realizar a explosão
-    private void explode() {
-        level.explode(this, getX(), getY(), getZ(), 4.0F, false, BREAK); // Realizar a explosão
+            // Se o alvo estiver vivo, mover o carro em direção a ele
+            if (target != null && target.isAlive()) {
+                Vector3d directionToTarget = target.position().subtract(this.position()).normalize().scale(0.5);
+                this.setDeltaMovement(directionToTarget); // Movimento em direção ao alvo
+                this.move(MoverType.SELF, this.getDeltaMovement());
+            }
+        }
     }
 
     @Override
@@ -106,13 +75,10 @@ public class CarProjectileEntity extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        // Não é mais necessário gerenciar EXPLOSION_TIME via DataManager
-    }
+    protected void defineSynchedData() {}
 
     @Override
     protected void readAdditionalSaveData(CompoundNBT nbt) {
-        ticksBeforeExplosion = nbt.getInt("ExplosionTime");
         if (nbt.hasUUID("Owner")) {
             ownerId = nbt.getUUID("Owner");
         }
@@ -120,9 +86,14 @@ public class CarProjectileEntity extends Entity {
 
     @Override
     protected void addAdditionalSaveData(CompoundNBT nbt) {
-        nbt.putInt("ExplosionTime", ticksBeforeExplosion);
         if (ownerId != null) {
             nbt.putUUID("Owner", ownerId);
         }
+    }
+
+    // Definir a posição do carro para evitar explosão imediata
+    @Override
+    public void setPos(double x, double y, double z) {
+        super.setPos(x, y, z); // Ajusta a posição do carro
     }
 }
