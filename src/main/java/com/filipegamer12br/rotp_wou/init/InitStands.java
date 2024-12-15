@@ -1,10 +1,7 @@
 package com.filipegamer12br.rotp_wou.init;
 
 import com.filipegamer12br.rotp_wou.WonderOfYouAddon;
-import com.filipegamer12br.rotp_wou.action.CalamityActive;
-import com.filipegamer12br.rotp_wou.action.CalamityPassive;
-import com.filipegamer12br.rotp_wou.action.ExplodeVariations;
-import com.filipegamer12br.rotp_wou.action.LightningStrike;
+import com.filipegamer12br.rotp_wou.action.*;
 import com.filipegamer12br.rotp_wou.entity.WonderOfYouEntity;
 import com.github.standobyte.jojo.action.Action;
 import com.github.standobyte.jojo.action.stand.*;
@@ -77,6 +74,13 @@ public class InitStands {
                     .staminaCost(50)
                     .partsRequired(StandPart.MAIN_BODY)));
 
+    public static final RegistryObject<CalamityAttack> CALAMITY_CAR_ATTACK = ACTIONS.register("calamity_car_attack",
+            () -> new CalamityAttack(new CalamityAttack.Builder()
+                    .holdToFire(30, true)
+                    .staminaCost(200)
+                    .staminaCostTick(10)
+                    .partsRequired(StandPart.MAIN_BODY)));
+
 
     public static final EntityStandRegistryObject<EntityStandType<StandStats>, StandEntityType<WonderOfYouEntity>> WONDER_OF_YOU =
             new EntityStandRegistryObject<>("wonder_of_you",
@@ -92,7 +96,8 @@ public class InitStands {
                             .rightClickHotbar(
                                     BLOCK.get(),
                                     CALAMITY_PASSIVE.get(),
-                                    CALAMITY_ACTIVE.get()
+                                    CALAMITY_ACTIVE.get(),
+                                    CALAMITY_CAR_ATTACK.get()
                             )
                             .defaultStats(StandStats.class, new StandStats.Builder()
                                     .power(18)

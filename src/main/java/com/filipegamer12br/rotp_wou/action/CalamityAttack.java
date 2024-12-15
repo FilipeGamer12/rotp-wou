@@ -10,8 +10,8 @@ import com.github.standobyte.jojo.power.impl.stand.IStandPower;
 
 import net.minecraft.world.World;
 
-public class CalamityPassive extends StandEntityAction {
-    public CalamityPassive(StandEntityAction.Builder builder) {
+public class CalamityAttack extends StandEntityAction {
+    public CalamityAttack(StandEntityAction.Builder builder) {
         super(builder);
     }
 
@@ -20,26 +20,25 @@ public class CalamityPassive extends StandEntityAction {
         if (!world.isClientSide()) {
             WonderOfYouEntity wouEntity = (WonderOfYouEntity) standEntity;
             if (wouEntity != null) {
-                // Desativa CalamityActive quando CalamityPassive é ativado
-                if (wouEntity.isCalamityActiveEnabled()) {
-                    wouEntity.setIsCalamityActiveEnabled(false);
+                // Ativa o modo de ataque "CalamityAttack"
+                if (!wouEntity.isCalamityCarAttackEnabled()) {
+                    wouEntity.setIsCalamityCarAttackEnabled(true);
+                    standEntity.playSound(InitSounds.CALAMITY_CAR_ATTACK.get(), 1F, 1);
+                } else {
+                    // Caso a habilidade já esteja ativa, pode desativá-la ou trocar o estado
+                    wouEntity.setIsCalamityCarAttackEnabled(false);
                 }
 
-                // Alterna o estado de CalamityPassive
-                wouEntity.setIsCalamityPassiveEnabled(!wouEntity.isCalamityPassiveEnabled());
-
-                if (wouEntity.isCalamityPassiveEnabled()) {
-                    standEntity.playSound(InitSounds.CALAMITY2.get(), 1F, 1);
-                }
-                System.out.println("Calamity Passive: " + wouEntity.isCalamityPassiveEnabled());
+                System.out.println("Calamity Attack: " + wouEntity.isCalamityCarAttackEnabled());
             }
         }
     }
 
     @Override
     public boolean greenSelection(IStandPower power, ActionConditionResult conditionCheck) {
-        if (power != null && power.getStandManifestation() instanceof WonderOfYouEntity){
-            return ((WonderOfYouEntity) power.getStandManifestation()).isCalamityPassiveEnabled();
+        if (power != null && power.getStandManifestation() instanceof WonderOfYouEntity) {
+            // Verifica se a habilidade está ativa
+            return ((WonderOfYouEntity) power.getStandManifestation()).isCalamityCarAttackEnabled();
         }
         return false;
     }

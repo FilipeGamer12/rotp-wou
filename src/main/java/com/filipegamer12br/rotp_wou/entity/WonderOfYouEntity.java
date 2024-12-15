@@ -12,6 +12,8 @@ public class WonderOfYouEntity extends StandEntity {
             EntityDataManager.defineId(WonderOfYouEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> IS_CALAMITY_ACTIVE_ENABLED =
             EntityDataManager.defineId(WonderOfYouEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_CALAMITY_CAR_ATTACK_ENABLED =
+            EntityDataManager.defineId(WonderOfYouEntity.class, DataSerializers.BOOLEAN); // Novo parâmetro para CalamityAttack
 
     public WonderOfYouEntity(StandEntityType<WonderOfYouEntity> type, World world) {
         super(type, world);
@@ -22,6 +24,7 @@ public class WonderOfYouEntity extends StandEntity {
         super.defineSynchedData();
         entityData.define(IS_CALAMITY_PASSIVE_ENABLED, false);
         entityData.define(IS_CALAMITY_ACTIVE_ENABLED, false);
+        entityData.define(IS_CALAMITY_CAR_ATTACK_ENABLED, false); // Definindo o estado inicial de CalamityAttack
     }
 
     public boolean isCalamityPassiveEnabled() {
@@ -38,5 +41,14 @@ public class WonderOfYouEntity extends StandEntity {
 
     public void setIsCalamityActiveEnabled(boolean status) {
         entityData.set(IS_CALAMITY_ACTIVE_ENABLED, status);
+    }
+
+    // Métodos para CalamityAttack
+    public boolean isCalamityCarAttackEnabled() {
+        return entityData.get(IS_CALAMITY_CAR_ATTACK_ENABLED);
+    }
+
+    public void setIsCalamityCarAttackEnabled(boolean status) {
+        entityData.set(IS_CALAMITY_CAR_ATTACK_ENABLED, status);
     }
 }
