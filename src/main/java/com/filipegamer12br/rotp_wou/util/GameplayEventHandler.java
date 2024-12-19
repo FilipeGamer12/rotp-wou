@@ -53,7 +53,7 @@ public class GameplayEventHandler {
                         if (wonderOfYouEntity.isCalamityPassiveEnabled()) {
                             float damageToOurWOU = event.getAmount();
                             // Reduzir o dano recebido
-                            event.setAmount(damageToOurWOU * 0.15F);
+                            event.setAmount(damageToOurWOU * 0.85F);
 
                             // Verificar se o atacante é uma entidade viva
                             if (event.getSource().getEntity() instanceof LivingEntity) {
@@ -70,7 +70,7 @@ public class GameplayEventHandler {
                                     if (standUser != null) {
                                         // Aplicar as penalidades ao usuário do Stand adversário
                                         standUser.hurt(event.getSource(), damageToOurWOU); // Dano ao usuário do Stand
-                                        standUser.addEffect(new EffectInstance(Effects.POISON, 100, 2, false, false, true)); // Veneno II
+                                        standUser.addEffect(new EffectInstance(Effects.POISON, 100, 3, false, false, true)); // Veneno III
                                         standUser.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 2, false, false, true)); // Lentidão II
                                         standUser.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 0, false, false, true)); // Cegueira
                                     }
@@ -79,7 +79,7 @@ public class GameplayEventHandler {
                                 else if (attacker instanceof PlayerEntity || attacker instanceof MobEntity) {
                                     // Aplicar os efeitos ao atacante diretamente
                                     attacker.hurt(event.getSource(), damageToOurWOU); // Dano ao atacante
-                                    attacker.addEffect(new EffectInstance(Effects.POISON, 100, 2, false, false, true)); // Veneno II
+                                    attacker.addEffect(new EffectInstance(Effects.POISON, 100, 3, false, false, true)); // Veneno III
                                     attacker.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 2, false, false, true)); // Lentidão II
                                     attacker.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 0, false, false, true)); // Cegueira
                                 }
@@ -126,7 +126,7 @@ public class GameplayEventHandler {
                                         standUser.hurt(DamageSource.MAGIC, 2.0F); // Dano mágico ao usuário do Stand adversário
                                         standUser.addEffect(new EffectInstance(Effects.POISON, 100, 1, false, false, true)); // Veneno I
                                         standUser.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 2, false, false, true)); // Lentidão II
-                                        standUser.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 0, false, false, true)); // Cegueira
+                                        standUser.addEffect(new EffectInstance(Effects.CONFUSION, 60, 0, false, false, true)); // Nausea
                                     }
                                 }
                                 // Se o atacante for um PlayerEntity ou MobEntity (não Stand)
@@ -135,7 +135,7 @@ public class GameplayEventHandler {
                                     attacker.hurt(DamageSource.MAGIC, 2.0F); // Dano mágico ao atacante
                                     attacker.addEffect(new EffectInstance(Effects.POISON, 100, 1, false, false, true)); // Veneno I
                                     attacker.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 2, false, false, true)); // Lentidão II
-                                    attacker.addEffect(new EffectInstance(Effects.BLINDNESS, 100, 0, false, false, true)); // Cegueira
+                                    attacker.addEffect(new EffectInstance(Effects.CONFUSION, 60, 0, false, false, true)); // Nausea
                                 }
                             }
                         }
@@ -144,7 +144,7 @@ public class GameplayEventHandler {
             });
         }
     }
-    @SubscribeEvent
+    /*@SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event) {
         LivingEntity entity = event.getEntityLiving();
         if (entity != null && !entity.level.isClientSide()) {
@@ -163,7 +163,7 @@ public class GameplayEventHandler {
                 }
             });
         }
-    }
+    }*/
     @SubscribeEvent
     public static void onProjectileImpact(ProjectileImpactEvent event) {
         // Verifica se o projétil é uma instância de ProjectileEntity (ou seja, qualquer projétil)
@@ -236,7 +236,7 @@ public class GameplayEventHandler {
 
                                     // Aplicar os efeitos negativos
                                     nearbyPlayer.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 3, false, false, true)); // Lentidão III
-                                    nearbyPlayer.addEffect(new EffectInstance(Effects.BLINDNESS, 60, 0, false, false, true)); // Cegueira
+                                    nearbyPlayer.addEffect(new EffectInstance(Effects.CONFUSION, 60, 0, false, false, true)); // Nausea
                                     nearbyPlayer.addEffect(new EffectInstance(Effects.POISON, 100, 1, false, false, true)); // Veneno I
 
                                     nearbyPlayer.hurt(DamageSource.MAGIC, 0.5F);

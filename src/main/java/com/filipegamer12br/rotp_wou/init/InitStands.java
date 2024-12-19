@@ -29,10 +29,6 @@ public class InitStands {
             () -> new StandEntityLightAttack(new StandEntityLightAttack.Builder()
                     .punchSound(InitSounds.PUNCH_LIGHT)));
 
-    public static final RegistryObject<StandEntityAction> BARRAGE = ACTIONS.register("barrage",
-            () -> new StandEntityMeleeBarrage(new StandEntityMeleeBarrage.Builder()
-                    .barrageHitSound(InitSounds.BARRAGE)));
-
     public static final RegistryObject<StandEntityHeavyAttack> FINISHER_PUNCH = ACTIONS.register("finisher_punch",
             () -> new StandEntityHeavyAttack(new StandEntityHeavyAttack.Builder()
                     .punchSound(InitSounds.PUNCH_HEAVY)
@@ -40,7 +36,7 @@ public class InitStands {
 
     public static final RegistryObject<StandEntityHeavyAttack> HEAVY_PUNCH = ACTIONS.register("heavy_punch",
             () -> new StandEntityHeavyAttack(new StandEntityHeavyAttack.Builder()
-                    .shiftVariationOf(PUNCH).shiftVariationOf(BARRAGE)
+                    .shiftVariationOf(PUNCH)
                     .setFinisherVariation(FINISHER_PUNCH)
                     .punchSound(InitSounds.PUNCH_HEAVY)
                     .partsRequired(StandPart.ARMS)));
@@ -51,7 +47,7 @@ public class InitStands {
     public static final RegistryObject<CalamityPassive> CALAMITY_PASSIVE = ACTIONS.register("calamity_passive",
             () -> new CalamityPassive(new CalamityPassive.Builder()
                     .holdToFire(20, false)
-                    .staminaCost(75)
+                    .staminaCost(125)
                     .partsRequired(StandPart.MAIN_BODY)));
 
     public static final RegistryObject<CalamityActive> CALAMITY_ACTIVE = ACTIONS.register("calamity_active",
@@ -63,7 +59,7 @@ public class InitStands {
 
     public static final RegistryObject<LightningStrike> LIGHTNING_STRIKE = ACTIONS.register("lightning_strike",
             () -> new LightningStrike(new LightningStrike.Builder()
-                    .holdToFire(15, false)
+                    .holdToFire(30, false)
                     .staminaCost(50) // Consome 50 de stamina
                     .partsRequired(StandPart.MAIN_BODY))); // Parte necessária para executar a habilidade
 
@@ -71,7 +67,7 @@ public class InitStands {
             () -> new ExplodeVariations(new ExplodeVariations.Builder()
                     .shiftVariationOf(LIGHTNING_STRIKE)
                     .holdToFire(20, false)
-                    .staminaCost(50)
+                    .staminaCost(80)
                     .partsRequired(StandPart.MAIN_BODY)));
 
     public static final RegistryObject<CalamityAttack> CALAMITY_CAR_ATTACK = ACTIONS.register("calamity_car_attack",
@@ -90,7 +86,6 @@ public class InitStands {
                             .storyPartName(StoryPart.JOJOLION.getName())
                             .leftClickHotbar(
                                     PUNCH.get(),
-                                    BARRAGE.get(),
                                     LIGHTNING_STRIKE.get()
                             )
                             .rightClickHotbar(
