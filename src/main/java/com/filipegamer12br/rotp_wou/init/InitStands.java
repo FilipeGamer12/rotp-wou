@@ -96,8 +96,8 @@ public class InitStands {
                             .rightClickHotbar(
                                     BLOCK.get(),
                                     CALAMITY_PASSIVE.get(),
-                                    CALAMITY_ACTIVE.get(),
-                                    CALAMITY_CAR_ATTACK.get()
+                                    CALAMITY_ACTIVE.get()/*,
+                                    CALAMITY_CAR_ATTACK.get()*/
                             )
                             .defaultStats(StandStats.class, new StandStats.Builder()
                                     .power(18)

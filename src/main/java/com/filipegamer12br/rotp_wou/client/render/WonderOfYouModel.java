@@ -1,18 +1,17 @@
 package com.filipegamer12br.rotp_wou.client.render;
 
+import com.github.standobyte.jojo.action.stand.StandEntityAction;
 import com.github.standobyte.jojo.client.render.entity.model.stand.HumanoidStandModel;
-import com.github.standobyte.jojo.client.render.entity.pose.IModelPose;
-import com.github.standobyte.jojo.client.render.entity.pose.ModelPose;
-import com.github.standobyte.jojo.client.render.entity.pose.RotationAngle;
+import com.github.standobyte.jojo.client.render.entity.pose.*;
 import com.filipegamer12br.rotp_wou.entity.WonderOfYouEntity;
+import com.github.standobyte.jojo.client.render.entity.pose.anim.PosedActionAnimation;
+import com.github.standobyte.jojo.entity.stand.StandPose;
 import net.minecraft.client.renderer.model.ModelRenderer;
 
 
 public class WonderOfYouModel extends HumanoidStandModel<WonderOfYouEntity> {
 
     ModelRenderer stick;
-    ModelRenderer cube_r17;
-    ModelRenderer cube_r18;
     ModelRenderer bone;
     ModelRenderer bone2;
     ModelRenderer bone3;
@@ -142,4 +141,12 @@ public class WonderOfYouModel extends HumanoidStandModel<WonderOfYouEntity> {
     protected IModelPose<WonderOfYouEntity> initIdlePose2Loop() {
         return super.initIdlePose2Loop();
     }
+
+    protected void initActionPoses(){
+
+
+
+        super.initActionPoses();
+    }
+
 }

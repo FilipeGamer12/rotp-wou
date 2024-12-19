@@ -4667,7 +4667,7 @@
 			"override": false,
 			"length": 3,
 			"snapping": 24,
-			"selected": true,
+			"selected": false,
 			"anim_time_update": "",
 			"blend_weight": "",
 			"start_delay": "",
@@ -10932,7 +10932,7 @@
 			"override": false,
 			"length": 1.04167,
 			"snapping": 24,
-			"selected": false,
+			"selected": true,
 			"anim_time_update": "",
 			"blend_weight": "",
 			"start_delay": "",
@@ -17209,19 +17209,6 @@
 					]
 				}
 			}
-		},
-		{
-			"uuid": "ac638de3-ec6a-5ed9-8c42-9ba2f4598d7f",
-			"name": "animation",
-			"loop": "once",
-			"override": false,
-			"length": 0,
-			"snapping": 24,
-			"selected": false,
-			"anim_time_update": "",
-			"blend_weight": "",
-			"start_delay": "",
-			"loop_delay": ""
 		}
 	]
 }
