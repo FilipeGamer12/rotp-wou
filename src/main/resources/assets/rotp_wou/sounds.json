@@ -1,4 +1,9 @@
 {
+  "car_damage": {
+    "sounds": ["rotp_wou:entity/tank_hurt_1","rotp_wou:entity/tank_hurt_2","rotp_wou:entity/tank_hurt_3","rotp_wou:entity/tank_hurt_4","rotp_wou:entity/tank_hurt_5"]
+  },
+
+
   "calamity1": {
     "sounds": [
       {
@@ -43,6 +48,7 @@
       }
     ]
   },
+
   "wou_ost_cassette": {
     "sounds": [
       {

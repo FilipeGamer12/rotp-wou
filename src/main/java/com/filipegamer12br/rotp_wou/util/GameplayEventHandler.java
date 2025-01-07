@@ -3,15 +3,11 @@ package com.filipegamer12br.rotp_wou.util;
 import com.filipegamer12br.rotp_wou.entity.CarProjectileEntity;
 import com.filipegamer12br.rotp_wou.init.InitEntities;
 import com.github.standobyte.jojo.entity.stand.StandEntity;
+import com.github.standobyte.jojo.power.impl.stand.type.StandType;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
 import com.filipegamer12br.rotp_wou.WonderOfYouAddon;
 import com.filipegamer12br.rotp_wou.entity.WonderOfYouEntity;
@@ -24,16 +20,13 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
-import com.github.standobyte.jojo.potion.ImmobilizeEffect;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.List;
-
 import static com.filipegamer12br.rotp_wou.action.CalamityActive.drainStamina;
-import static sun.audio.AudioPlayer.player;
 
 @Mod.EventBusSubscriber(modid = WonderOfYouAddon.MOD_ID)
 public class GameplayEventHandler {
@@ -249,61 +242,7 @@ public class GameplayEventHandler {
         }
     }
 
-    // Car Calamity
 
-
-    @SubscribeEvent
-    public static void onCarProjectileTick(TickEvent.WorldTickEvent event) {
-        if (event.world instanceof ServerWorld) {
-            ServerWorld serverWorld = (ServerWorld) event.world;
-
-            // Obter todas as entidades do tipo CarProjectileEntity
-            List<CarProjectileEntity> carProjectiles = serverWorld.getEntitiesOfClass(
-                    CarProjectileEntity.class,
-                    new AxisAlignedBB(-50, -50, -50, 50, 50, 50)
-            );
-
-            for (CarProjectileEntity carProjectile : carProjectiles) {
-                handleCarProjectile(carProjectile, serverWorld);
-            }
-        }
-    }
-
-    private static void handleCarProjectile(CarProjectileEntity carProjectile, ServerWorld world) {
-        // Verificar se o carro ainda está em movimento
-        if (carProjectile.owner != null) {
-            // Acelerar o movimento em direção ao alvo
-            Vector3d direction = getDirectionToTarget(carProjectile, world);
-            carProjectile.setDeltaMovement(carProjectile.getDeltaMovement().add(direction.scale(0.05))); // Aceleração
-
-            // Movimenta o carro
-            carProjectile.move(MoverType.SELF, carProjectile.getDeltaMovement());
-
-            // Verificar colisão com entidades
-            AxisAlignedBB aabb = carProjectile.getBoundingBox().inflate(0.5);
-            List<LivingEntity> hitEntities = world.getEntitiesOfClass(LivingEntity.class, aabb, entity -> entity != carProjectile.owner);
-
-            for (LivingEntity hitEntity : hitEntities) {
-                if (hitEntity.isAlive()) {
-                    applyCarImpactEffects(carProjectile, hitEntity);
-                    createExplosion(carProjectile, world);
-                    carProjectile.remove();
-                    return;
-                }
-            }
-        }
-    }
-
-    private static void applyCarImpactEffects(CarProjectileEntity carProjectile, LivingEntity target) {
-        // Aplica o efeito de imobilização (stun) no alvo
-        target.addEffect(new EffectInstance(new ImmobilizeEffect(0x0000FF), 100, 0, false, false, true));
-
-        // Se a habilidade Calamity estiver ativa, causar dano adicional
-        WonderOfYouEntity wouEntity = getStandEntityForPlayer(carProjectile.owner);
-        if (wouEntity != null && wouEntity.isCalamityCarAttackEnabled()) {
-            target.hurt(DamageSource.MAGIC, 5.0F); // Dano adicional
-        }
-    }
 
     private static WonderOfYouEntity getStandEntityForPlayer(Entity owner) {
         if (owner instanceof PlayerEntity) {
@@ -315,43 +254,57 @@ public class GameplayEventHandler {
         return null;
     }
 
-    private static void createExplosion(CarProjectileEntity carProjectile, ServerWorld world) {
-        // Cria a explosão no local do carro
-        world.explode(
-                carProjectile,
-                carProjectile.getX(),
-                carProjectile.getY(),
-                carProjectile.getZ(),
-                4.0F,
-                Explosion.Mode.NONE
-        );
-    }
 
-    private static Vector3d getDirectionToTarget(CarProjectileEntity carProjectile, ServerWorld world) {
-        // A posição do alvo (último alvo do jogador dono do carro)
-        if (carProjectile.owner instanceof LivingEntity) {
-            LivingEntity livingOwner = (LivingEntity) carProjectile.owner;
-            LivingEntity target = livingOwner.getLastHurtMob(); // Agora você pode acessar o método
-            if (target != null && target.isAlive()) {
-                // Aplicar efeitos de impacto no alvo
-                spawnCarAndStunTarget(world, target, livingOwner); // Chamar o método para tratar o stun
+
+
+    @SubscribeEvent
+    public static void carSummon(LivingAttackEvent event){
+        LivingEntity user = event.getEntityLiving();
+        if(!user.level.isClientSide){
+            Entity attacker = event.getSource().getEntity();
+
+            if(user instanceof WonderOfYouEntity){
+                WonderOfYouEntity wonderOfYou = (WonderOfYouEntity) user;
+                if(attacker instanceof LivingEntity && wonderOfYou.isCalamityCarAttackEnabled()){
+                    carlamity(wonderOfYou,(LivingEntity) attacker,event);
+                }
+            }else {
+
+                StandType<?> WOU = InitStands.WONDER_OF_YOU.getStandType();
+                IStandPower.getStandPowerOptional(user).ifPresent(power -> {
+                    if(power.getType() == WOU && power.getStandManifestation() instanceof StandEntity){
+                        WonderOfYouEntity wonderOfYou = (WonderOfYouEntity) power.getStandManifestation();
+                        if(wonderOfYou != null && wonderOfYou.isCalamityCarAttackEnabled() && attacker instanceof LivingEntity){
+                            carlamity(wonderOfYou,(LivingEntity) attacker, event);
+                        }
+                    }
+                });
             }
 
-            // Calcula a direção do carro para o alvo
-            Vector3d targetPosition = (target != null && target.isAlive()) ? target.position() : carProjectile.position();
-            return targetPosition.subtract(carProjectile.position()).normalize(); // Normaliza a direção para garantir que o carro se mova em linha reta
         }
-        return Vector3d.ZERO; // Retorna uma direção nula se não houver dono ou alvo
+
     }
 
-    private static void spawnCarAndStunTarget(ServerWorld world, LivingEntity target, LivingEntity owner) {
-        // Aqui você pode adicionar a lógica de spawn do carro e aplicar o efeito de stun
-        target.addEffect(new EffectInstance(new ImmobilizeEffect(0x0000FF), 100, 0, false, false, true));
 
-        // Spawn da entidade CarProjectileEntity
-        CarProjectileEntity carProjectile = new CarProjectileEntity(InitEntities.CAR_PROJECTILE.get(), world);
-        carProjectile.setOwner(owner); // Define o dono do carro como o jogador ou entidade controladora
-        carProjectile.setPos(target.getX(), target.getY(), target.getZ()); // Define a posição inicial do carro próximo ao alvo
-        world.addFreshEntity(carProjectile); // Adiciona a entidade no mundo
+    public static void carlamity(WonderOfYouEntity wonderOfYou, LivingEntity attacker,LivingAttackEvent event ){
+        event.setCanceled(true);
+        double xCircle = attacker.getX()+10F* Math.cos(2F*3.14159F * Math.random());
+        double zCircle = attacker.getZ()+10F* Math.sin(2F*3.14159F * Math.random());
+        if(wonderOfYou.getCarProjectile() == null){
+            CarProjectileEntity carProjectile =  new CarProjectileEntity(InitEntities.CAR_PROJECTILE.get(), wonderOfYou.level);
+            LivingEntity owner = wonderOfYou.getUser() != null? wonderOfYou.getUser(): wonderOfYou;
+            carProjectile.setOwnerUUID(owner.getUUID());
+            carProjectile.setTarget(attacker);
+            carProjectile.teleportTo(xCircle, attacker.getY(), zCircle);
+            wonderOfYou.level.addFreshEntity(carProjectile);
+            wonderOfYou.addEffect(new EffectInstance(Effects.DOLPHINS_GRACE,3,Integer.MAX_VALUE,false,false,false));
+
+            wonderOfYou.setCarProjectile(carProjectile);
+        }else {
+            CarProjectileEntity carProjectile = wonderOfYou.getCarProjectile();
+            carProjectile.setTarget(attacker);
+        }
+
     }
+
 }

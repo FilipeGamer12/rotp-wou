@@ -44,6 +44,11 @@ public class InitSounds {
     public static final RegistryObject<SoundEvent> CALAMITY_CAR_ATTACK = SOUNDS.register("test",
             () -> new SoundEvent(new ResourceLocation(WonderOfYouAddon.MOD_ID, "calamity4")));
 
+    public static final RegistryObject<SoundEvent> CAR_HURT = SOUNDS.register("car_damage",
+            () -> new SoundEvent(new ResourceLocation(WonderOfYouAddon.MOD_ID, "car_damage")));
+
+
+
     public static final OstSoundList WOU_OST = new OstSoundList(
             new ResourceLocation(WonderOfYouAddon.MOD_ID, "wou_ost"), SOUNDS);
 }
