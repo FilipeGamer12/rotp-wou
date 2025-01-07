@@ -33,6 +33,7 @@ public class CarAttackMeleeGoal extends Goal {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
+    @Override
     public boolean canUse() {
         if(this.mob.getHits() < this.mob.getHitsBeforeExplode()){
             long i = this.mob.level.getGameTime();
@@ -67,6 +68,7 @@ public class CarAttackMeleeGoal extends Goal {
 
     }
 
+    @Override
     public boolean canContinueToUse() {
         LivingEntity livingentity = this.mob.getTarget();
         if (livingentity == null) {
@@ -82,6 +84,7 @@ public class CarAttackMeleeGoal extends Goal {
         }
     }
 
+    @Override
     public void start() {
         this.mob.getNavigation().moveTo(this.path, this.speedModifier);
         this.mob.setAggressive(true);
@@ -89,6 +92,7 @@ public class CarAttackMeleeGoal extends Goal {
         this.ticksUntilNextAttack = 0;
     }
 
+    @Override
     public void stop() {
         LivingEntity livingentity = this.mob.getTarget();
         if (!EntityPredicates.NO_CREATIVE_OR_SPECTATOR.test(livingentity)) {
@@ -99,6 +103,7 @@ public class CarAttackMeleeGoal extends Goal {
         this.mob.getNavigation().stop();
     }
 
+    @Override
     public void tick() {
         LivingEntity livingentity = this.mob.getTarget();
         this.mob.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);

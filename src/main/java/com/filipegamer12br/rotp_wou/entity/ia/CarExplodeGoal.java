@@ -16,6 +16,7 @@ public class CarExplodeGoal extends Goal {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
+    @Override
     public boolean canUse() {
         if(this.mob.getHits() >= this.mob.getHitsBeforeExplode()){
             LivingEntity livingentity = this.mob.getTarget();
@@ -24,16 +25,19 @@ public class CarExplodeGoal extends Goal {
         return false;
     }
 
+    @Override
     public void start() {
         this.mob.getNavigation().stop();
         this.target = this.mob.getTarget();
     }
 
 
+    @Override
     public void stop() {
         this.target = null;
     }
 
+    @Override
     public void tick() {
         if (this.target == null) {
             this.mob.setSwellDir(-1);
