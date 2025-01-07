@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.EnumSet;
 
@@ -107,9 +108,25 @@ public class CarAttackMeleeGoal extends Goal {
     public void tick() {
         LivingEntity livingentity = this.mob.getTarget();
         this.mob.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
-        double d0 = this.mob.distanceToSqr(livingentity.getX(), livingentity.getY(), livingentity.getZ());
+
+        // Calcular a direção da rotação necessária para o alvo
+        double deltaX = livingentity.getX() - this.mob.getX();
+        double deltaZ = livingentity.getZ() - this.mob.getZ();
+        float targetRotation = (float) Math.atan2(deltaZ, deltaX);
+
+        // Ajuste suave da rotação
+        float deltaRotation = MathHelper.degreesDifference(this.mob.yRot, targetRotation);
+        this.mob.yRot += deltaRotation * 0.1F; // Ajuste a suavização com o fator desejado
+
+        double distanceToTarget = this.mob.distanceToSqr(livingentity.getX(), livingentity.getY(), livingentity.getZ());
         this.ticksUntilNextPathRecalculation = Math.max(this.ticksUntilNextPathRecalculation - 1, 0);
-        if ((this.followingTargetEvenIfNotSeen || this.mob.getSensing().canSee(livingentity)) && this.ticksUntilNextPathRecalculation <= 0 && (this.pathedTargetX == 0.0D && this.pathedTargetY == 0.0D && this.pathedTargetZ == 0.0D || livingentity.distanceToSqr(this.pathedTargetX, this.pathedTargetY, this.pathedTargetZ) >= 1.0D || this.mob.getRandom().nextFloat() < 0.05F)) {
+
+        if ((this.followingTargetEvenIfNotSeen || this.mob.getSensing().canSee(livingentity)) &&
+                this.ticksUntilNextPathRecalculation <= 0 &&
+                (this.pathedTargetX == 0.0D && this.pathedTargetY == 0.0D && this.pathedTargetZ == 0.0D ||
+                        livingentity.distanceToSqr(this.pathedTargetX, this.pathedTargetY, this.pathedTargetZ) >= 1.0D ||
+                        this.mob.getRandom().nextFloat() < 0.05F)) {
+
             this.pathedTargetX = livingentity.getX();
             this.pathedTargetY = livingentity.getY();
             this.pathedTargetZ = livingentity.getZ();
@@ -126,9 +143,10 @@ public class CarAttackMeleeGoal extends Goal {
                     failedPathFindingPenalty += 10;
                 }
             }
-            if (d0 > 1024.0D) {
+
+            if (distanceToTarget > 1024.0D) {
                 this.ticksUntilNextPathRecalculation += 10;
-            } else if (d0 > 256.0D) {
+            } else if (distanceToTarget > 256.0D) {
                 this.ticksUntilNextPathRecalculation += 5;
             }
 
@@ -138,18 +156,16 @@ public class CarAttackMeleeGoal extends Goal {
         }
 
         this.ticksUntilNextAttack = Math.max(this.ticksUntilNextAttack - 1, 0);
-        this.checkAndPerformAttack(livingentity, d0);
-    }
 
-    protected void checkAndPerformAttack(LivingEntity p_190102_1_, double p_190102_2_) {
-        double d0 = this.getAttackReachSqr(p_190102_1_);
-        if (p_190102_2_ <= d0 && this.ticksUntilNextAttack <= 0) {
-            this.resetAttackCooldown();
-            this.mob.swing(Hand.MAIN_HAND);
-            this.mob.doHurtTarget(p_190102_1_);
-            this.mob.setDataHits(this.mob.getHits()+1);
+        // Verifica se está na distância de ataque
+        if (distanceToTarget <= this.getAttackReachSqr(livingentity)) {
+            if (this.ticksUntilNextAttack <= 0) {
+                this.resetAttackCooldown();
+                this.mob.swing(Hand.MAIN_HAND);
+                this.mob.doHurtTarget(livingentity);
+                this.mob.setDataHits(this.mob.getHits() + 1);  // Aumenta os hits
+            }
         }
-
     }
 
     protected void resetAttackCooldown() {
