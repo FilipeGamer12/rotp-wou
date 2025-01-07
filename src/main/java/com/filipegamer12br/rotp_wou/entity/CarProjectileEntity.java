@@ -78,15 +78,12 @@ public class CarProjectileEntity extends TameableEntity {
         if(!this.level.isClientSide){
             if (this.isAlive()) {
                 if(this.getTarget() != null){
-                    double deltaX = this.getTarget().getX()-this.getX();
-                    double deltaZ = this.getTarget().getZ()-this.getZ();
-
-                    this.yRotO = (float) Math.atan(deltaX/deltaZ);
 
                     if(!this.getTarget().isAlive()){
                         this.setTarget(null);
                         setDataHits(0);
                     }
+
                 }
 
 
