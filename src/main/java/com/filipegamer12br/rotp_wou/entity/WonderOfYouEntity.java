@@ -15,6 +15,9 @@ public class WonderOfYouEntity extends StandEntity {
     private static final DataParameter<Boolean> IS_CALAMITY_CAR_ATTACK_ENABLED =
             EntityDataManager.defineId(WonderOfYouEntity.class, DataSerializers.BOOLEAN); // Novo parâmetro para CalamityAttack
 
+    private CarProjectileEntity carProjectile;
+
+
     public WonderOfYouEntity(StandEntityType<WonderOfYouEntity> type, World world) {
         super(type, world);
     }
@@ -25,6 +28,16 @@ public class WonderOfYouEntity extends StandEntity {
         entityData.define(IS_CALAMITY_PASSIVE_ENABLED, false);
         entityData.define(IS_CALAMITY_ACTIVE_ENABLED, false);
         entityData.define(IS_CALAMITY_CAR_ATTACK_ENABLED, false); // Definindo o estado inicial de CalamityAttack
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if(!level.isClientSide()){
+            if(carProjectile != null && !carProjectile.isAlive()){
+                carProjectile = null;
+            }
+        }
     }
 
     public boolean isCalamityPassiveEnabled() {
@@ -51,4 +64,14 @@ public class WonderOfYouEntity extends StandEntity {
     public void setIsCalamityCarAttackEnabled(boolean status) {
         entityData.set(IS_CALAMITY_CAR_ATTACK_ENABLED, status);
     }
+
+
+    public CarProjectileEntity getCarProjectile() {
+        return this.carProjectile;
+    }
+
+    public void setCarProjectile(CarProjectileEntity carProjectile) {
+        this.carProjectile = carProjectile;
+    }
+
 }
