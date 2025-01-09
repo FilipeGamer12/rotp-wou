@@ -166,6 +166,9 @@ public class CarAttackMeleeGoal extends Goal {
                 this.mob.setDataHits(this.mob.getHits() + 1);  // Aumenta os hits
             }
         }
+        if (this.mob.horizontalCollision) {
+            this.mob.getNavigation().stop();
+        }
     }
 
     protected void resetAttackCooldown() {

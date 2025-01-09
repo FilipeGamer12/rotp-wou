@@ -10,6 +10,7 @@ public class CarExplodeGoal extends Goal {
 
     private final CarProjectileEntity mob;
     private LivingEntity target;
+    private int ticksWithoutTarget; // Contador para o tempo sem alvo
 
     public CarExplodeGoal(CarProjectileEntity shearheart) {
         this.mob = shearheart;
@@ -47,6 +48,9 @@ public class CarExplodeGoal extends Goal {
             this.mob.setSwellDir(-1);
         } else {
             this.mob.setSwellDir(1);
+        }
+        if (this.ticksWithoutTarget > 100) {
+            this.mob.remove();
         }
     }
 }

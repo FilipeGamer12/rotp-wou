@@ -118,7 +118,7 @@ public class CarProjectileModel extends EntityModel<CarProjectileEntity> {
 
     @Override
     public void setupAnim(CarProjectileEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
-        this.RealCar.yRot = headPitch;
+        this.RealCar.yRot = netHeadYaw;
     }
 
     @Override
