@@ -56,7 +56,7 @@ public class CalamityAttack extends StandEntityAction {
             if (userPower.getStamina() <= 0) {
                 if (userPower.getStandManifestation() instanceof WonderOfYouEntity) {
                     WonderOfYouEntity wouEntity = (WonderOfYouEntity) userPower.getStandManifestation();
-                    wouEntity.setIsCalamityCarAttackEnabled(false); // Desativa CalamityActive
+                    wouEntity.setIsCalamityCarAttackEnabled(false); // Desativa CalamityAttack
                 }
             }
         }
