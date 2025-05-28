@@ -27,7 +27,7 @@ public class WonderOfYouModel extends HumanoidStandModel<WonderOfYouEntity> {
     protected RotationAngle[][] initSummonPoseRotations() {
         return new RotationAngle[][] {
                 new RotationAngle[] {
-// I done it weever
+
                         // Cabeça (head)
                         RotationAngle.fromDegrees(head, 20, 0, 0),
 
