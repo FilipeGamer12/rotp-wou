@@ -75,6 +75,7 @@ public class InitStands {
                     .holdToFire(20, false)
                     .staminaCost(600)
                     .staminaCostTick(10)
+                    .standWindupDuration(20)
                     .partsRequired(StandPart.MAIN_BODY)));
 
 

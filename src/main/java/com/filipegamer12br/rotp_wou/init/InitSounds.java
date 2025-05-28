@@ -29,8 +29,8 @@ public class InitSounds {
     
     //public static final Supplier<SoundEvent> BARRAGE = ModSounds.STAND_PUNCH_LIGHT;
 
-    public static final RegistryObject<SoundEvent> CALAMITY1 = SOUNDS.register("calamity1",
-            () -> new SoundEvent(new ResourceLocation(WonderOfYouAddon.MOD_ID, "calamity1"))); // summon
+    public static final RegistryObject<SoundEvent> CALAMITY_CAR_ATTACK = SOUNDS.register("calamity1",
+            () -> new SoundEvent(new ResourceLocation(WonderOfYouAddon.MOD_ID, "calamity1"))); // car attack
 
     public static final RegistryObject<SoundEvent> CALAMITY2 = SOUNDS.register("calamity2",
             () -> new SoundEvent(new ResourceLocation(WonderOfYouAddon.MOD_ID, "calamity2"))); // calamity passive
@@ -41,8 +41,8 @@ public class InitSounds {
     public static final RegistryObject<SoundEvent> CALAMITY4 = SOUNDS.register("calamity4",
             () -> new SoundEvent(new ResourceLocation(WonderOfYouAddon.MOD_ID, "calamity4"))); // lightning and explosion
 
-    public static final RegistryObject<SoundEvent> CALAMITY_CAR_ATTACK = SOUNDS.register("calamity5",
-            () -> new SoundEvent(new ResourceLocation(WonderOfYouAddon.MOD_ID, "calamity5"))); // car attack
+    public static final RegistryObject<SoundEvent> CALAMITY1 = SOUNDS.register("calamity5",
+            () -> new SoundEvent(new ResourceLocation(WonderOfYouAddon.MOD_ID, "calamity5"))); // summon
 
     public static final RegistryObject<SoundEvent> CAR_HURT = SOUNDS.register("car_damage",
             () -> new SoundEvent(new ResourceLocation(WonderOfYouAddon.MOD_ID, "car_damage")));
