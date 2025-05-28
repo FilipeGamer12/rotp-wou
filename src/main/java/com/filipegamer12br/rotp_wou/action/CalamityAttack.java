@@ -7,29 +7,86 @@ import com.github.standobyte.jojo.action.stand.StandEntityAction;
 import com.github.standobyte.jojo.entity.stand.StandEntity;
 import com.github.standobyte.jojo.entity.stand.StandEntityTask;
 import com.github.standobyte.jojo.power.impl.stand.IStandPower;
-
 import net.minecraft.world.World;
 
 public class CalamityAttack extends StandEntityAction {
+
+    private static final long COOLDOWN_TICKS = 20 * 6; // 6 segundos
+    private long lastActivationTick = -COOLDOWN_TICKS;
+
     public CalamityAttack(StandEntityAction.Builder builder) {
         super(builder);
     }
 
     @Override
     public void standPerform(World world, StandEntity standEntity, IStandPower userPower, StandEntityTask task) {
-        if (!world.isClientSide()) {
+        if (!world.isClientSide() && standEntity instanceof WonderOfYouEntity) {
             WonderOfYouEntity wouEntity = (WonderOfYouEntity) standEntity;
-            if (wouEntity != null) {
-                // Ativa o modo de ataque "CalamityAttack"
-                if (!wouEntity.isCalamityCarAttackEnabled()) {
-                    wouEntity.setIsCalamityCarAttackEnabled(true);
-                    standEntity.playSound(InitSounds.CALAMITY_CAR_ATTACK.get(), 1F, 1);
-                } else {
-                    // Caso a habilidade já esteja ativa, pode desativá-la ou trocar o estado
-                    wouEntity.setIsCalamityCarAttackEnabled(false);
-                }
+            long currentTick = world.getGameTime();
 
-                System.out.println("Calamity Attack: " + wouEntity.isCalamityCarAttackEnabled());
+            // Impede reativação durante o cooldown
+            if ((currentTick - lastActivationTick) < COOLDOWN_TICKS) {
+                return;
+            }
+
+            // Alterna o estado da habilidade
+            boolean currentlyEnabled = wouEntity.isCalamityCarAttackEnabled();
+            wouEntity.setIsCalamityCarAttackEnabled(!currentlyEnabled);
+
+            // Se ativando, atualiza cooldown e toca som
+            if (!currentlyEnabled) {
+                standEntity.playSound(InitSounds.CALAMITY_CAR_ATTACK.get(), 1F, 1);
+                lastActivationTick = currentTick;
+            }
+
+            System.out.println("Calamity Attack: " + wouEntity.isCalamityCarAttackEnabled());
+        }
+    }
+
+    // Tick da ação: chamado a cada tick enquanto ativa
+    //@Override
+    //public void tick(World world, StandEntity standEntity, IStandPower userPower, StandEntityTask task) {
+//        if (!world.isClientSide() && standEntity instanceof WonderOfYouEntity) {
+//        WonderOfYouEntity wouEntity = (WonderOfYouEntity) standEntity;
+//
+//        if (wouEntity.isCalamityCarAttackEnabled()) {
+//            boolean hasStamina = drainStamina(userPower);
+//            if (!hasStamina) {
+//                wouEntity.setIsCalamityCarAttackEnabled(false); // Desativa ao esgotar stamina
+//            }
+//        }
+//    }
+
+    // Método de drenagem de stamina contínua
+//    private boolean drainStamina(IStandPower userPower) {
+//        if (userPower != null && userPower.getMaxStamina() > 0) {
+//            float staminaDrain = 2.0F; // por tick
+//            if (userPower.getStamina() >= staminaDrain) {
+//                userPower.consumeStamina(staminaDrain);
+//                return true;
+//            } else {
+//                userPower.consumeStamina(userPower.getStamina());
+//                return false;
+//            }
+//        }
+//        return false;
+//    }
+
+    public static void drainStamina2(IStandPower userPower) {
+        if (userPower != null && userPower.getMaxStamina() > 0) {
+            // Drena 4 de stamina por tick
+            float staminaDrain = 4.0F;
+            if (userPower.getStamina() >= staminaDrain) {
+                userPower.consumeStamina(staminaDrain);
+            } else {
+                // Caso o usuário não tenha stamina suficiente, talvez definir a stamina como 0
+                userPower.consumeStamina(userPower.getStamina());  // Drena toda a stamina restante
+            }
+            if (userPower.getStamina() <= 0) {
+                if (userPower.getStandManifestation() instanceof WonderOfYouEntity) {
+                    WonderOfYouEntity wouEntity = (WonderOfYouEntity) userPower.getStandManifestation();
+                    wouEntity.setIsCalamityCarAttackEnabled(false); // Desativa CalamityActive
+                }
             }
         }
     }
@@ -37,7 +94,6 @@ public class CalamityAttack extends StandEntityAction {
     @Override
     public boolean greenSelection(IStandPower power, ActionConditionResult conditionCheck) {
         if (power != null && power.getStandManifestation() instanceof WonderOfYouEntity) {
-            // Verifica se a habilidade está ativa
             return ((WonderOfYouEntity) power.getStandManifestation()).isCalamityCarAttackEnabled();
         }
         return false;

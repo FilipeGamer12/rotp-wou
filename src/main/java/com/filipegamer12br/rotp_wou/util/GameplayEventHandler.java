@@ -3,11 +3,16 @@ package com.filipegamer12br.rotp_wou.util;
 import com.filipegamer12br.rotp_wou.entity.CarProjectileEntity;
 import com.filipegamer12br.rotp_wou.init.InitEntities;
 import com.github.standobyte.jojo.entity.stand.StandEntity;
+import com.github.standobyte.jojo.entity.stand.StandEntityTask;
 import com.github.standobyte.jojo.power.impl.stand.type.StandType;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
 import com.filipegamer12br.rotp_wou.WonderOfYouAddon;
 import com.filipegamer12br.rotp_wou.entity.WonderOfYouEntity;
@@ -27,6 +32,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import static com.filipegamer12br.rotp_wou.action.CalamityActive.drainStamina;
+import static com.filipegamer12br.rotp_wou.action.CalamityAttack.drainStamina2;
 
 @Mod.EventBusSubscriber(modid = WonderOfYouAddon.MOD_ID)
 public class GameplayEventHandler {
@@ -203,6 +209,10 @@ public class GameplayEventHandler {
                             // Drena 2 de stamina por tick
                             drainStamina(power);
                         }
+                        if (wonderOfYouEntity.isCalamityCarAttackEnabled()) {
+                            // Drena 4 de stamina por tick
+                            drainStamina2(power);
+                        }
                     }
                 }
             });
@@ -240,7 +250,47 @@ public class GameplayEventHandler {
                 }
             });
         }
+        //phantom walk ability
+//        if (!player.level.isClientSide()) {
+//            IStandPower.getStandPowerOptional(player).ifPresent(power -> {
+//                // Verifica se o jogador tem o Stand "Wonder Of You" ativo
+//                if (power.getType() == InitStands.WONDER_OF_YOU.getStandType() && power.isActive()) {
+//                    if (power.getStandManifestation() instanceof WonderOfYouEntity) {
+//                        WonderOfYouEntity wonderOfYouEntity = (WonderOfYouEntity) power.getStandManifestation();
+//
+//                        // Verifica se a habilidade Phantom Walk está ativada (enquanto o player está agachado)
+//                        if (wonderOfYouEntity.isPhantomWalkEnabled()) {
+//                            if (player.isShiftKeyDown()) { // Verifica se o jogador está agachado
+//                                // Habilidade ativa enquanto o jogador está agachado
+//                                activatePhantomWalk(wonderOfYouEntity, player);
+//                            }
+//                        }
+//                    }
+//                }
+//            });
+//        }
     }
+
+    // Função que ativa a habilidade Phantom Walk para o jogador e o Stand
+//    public static void activatePhantomWalk(WonderOfYouEntity wonderOfYouEntity, PlayerEntity player) {
+//        // A posição do Stand (ou do jogador) para onde ele deve se mover
+//        Vector3d standPos = wonderOfYouEntity.position();
+//        Vector3d lookVector = wonderOfYouEntity.getLookAngle();
+//
+//        // Distância que o Stand ou jogador vai se mover
+//        double distance = 2.0;
+//        Vector3d targetPos = standPos.add(lookVector.x * distance, 0, lookVector.z * distance);
+//        BlockPos targetBlockPos = new BlockPos(targetPos);
+//
+//        // Verifica se o bloco à frente é sólido (para atravessar a parede)
+//        if (player.level.getBlockState(targetBlockPos).getMaterial().isSolid()) {
+//            // Teleporta o Stand para atravessar a parede
+//            wonderOfYouEntity.teleportTo(targetPos.x, targetPos.y, targetPos.z);
+//
+//            // Teleporta o jogador para a mesma posição
+//            player.teleportTo(targetPos.x, targetPos.y, targetPos.z);
+//        }
+//    }
 
 
 
@@ -254,57 +304,68 @@ public class GameplayEventHandler {
         return null;
     }
 
-
-
-
+    //car calamity
     @SubscribeEvent
-    public static void carSummon(LivingAttackEvent event){
+    public static void carSummon(LivingAttackEvent event) {
         LivingEntity user = event.getEntityLiving();
-        if(!user.level.isClientSide){
+
+        if (!user.level.isClientSide) {
             Entity attacker = event.getSource().getEntity();
 
-            if(user instanceof WonderOfYouEntity){
+            if (user instanceof WonderOfYouEntity) {
                 WonderOfYouEntity wonderOfYou = (WonderOfYouEntity) user;
-                if(attacker instanceof LivingEntity && wonderOfYou.isCalamityCarAttackEnabled()){
-                    carlamity(wonderOfYou,(LivingEntity) attacker,event);
-                }
-            }else {
 
+                if (attacker instanceof LivingEntity && wonderOfYou.isCalamityCarAttackEnabled()) {
+                    carlamity(wonderOfYou, (LivingEntity) attacker, event);
+                }
+
+            } else {
                 StandType<?> WOU = InitStands.WONDER_OF_YOU.getStandType();
+
                 IStandPower.getStandPowerOptional(user).ifPresent(power -> {
-                    if(power.getType() == WOU && power.getStandManifestation() instanceof StandEntity){
+                    if (power.getType() == WOU && power.getStandManifestation() instanceof StandEntity) {
                         WonderOfYouEntity wonderOfYou = (WonderOfYouEntity) power.getStandManifestation();
-                        if(wonderOfYou != null && wonderOfYou.isCalamityCarAttackEnabled() && attacker instanceof LivingEntity){
-                            carlamity(wonderOfYou,(LivingEntity) attacker, event);
+
+                        if (wonderOfYou != null && wonderOfYou.isCalamityCarAttackEnabled() && attacker instanceof LivingEntity) {
+                            carlamity(wonderOfYou, (LivingEntity) attacker, event);
                         }
                     }
                 });
             }
-
         }
-
     }
 
-
-    public static void carlamity(WonderOfYouEntity wonderOfYou, LivingEntity attacker,LivingAttackEvent event ){
+    public static void carlamity(WonderOfYouEntity wonderOfYou, LivingEntity attacker, LivingAttackEvent event) {
         event.setCanceled(true);
-        double xCircle = attacker.getX()+10F* Math.cos(2F*3.14159F * Math.random());
-        double zCircle = attacker.getZ()+10F* Math.sin(2F*3.14159F * Math.random());
-        if(wonderOfYou.getCarProjectile() == null){
-            CarProjectileEntity carProjectile =  new CarProjectileEntity(InitEntities.CAR_PROJECTILE.get(), wonderOfYou.level);
-            LivingEntity owner = wonderOfYou.getUser() != null? wonderOfYou.getUser(): wonderOfYou;
-            carProjectile.setOwnerUUID(owner.getUUID());
-            carProjectile.setTarget(attacker);
-            carProjectile.teleportTo(xCircle, attacker.getY(), zCircle);
-            wonderOfYou.level.addFreshEntity(carProjectile);
-            wonderOfYou.addEffect(new EffectInstance(Effects.DOLPHINS_GRACE,3,Integer.MAX_VALUE,false,false,false));
 
-            wonderOfYou.setCarProjectile(carProjectile);
-        }else {
-            CarProjectileEntity carProjectile = wonderOfYou.getCarProjectile();
-            carProjectile.setTarget(attacker);
+        long now = System.currentTimeMillis();
+
+        // Cooldown de 6 segundos (6000 ms)
+        if (now - wonderOfYou.getLastCarSpawnTime() < 6000) {
+            return;
         }
 
+        if (wonderOfYou.getCarProjectile() == null) {
+            double x = attacker.getX();
+            double y = attacker.getY() + 7;
+            double z = attacker.getZ();
+
+            CarProjectileEntity carProjectile = new CarProjectileEntity(InitEntities.CAR_PROJECTILE.get(), wonderOfYou.level);
+            LivingEntity owner = wonderOfYou.getUser() != null ? wonderOfYou.getUser() : wonderOfYou;
+
+            carProjectile.setOwner(owner);
+            carProjectile.setTarget(attacker);
+            carProjectile.teleportTo(x, y, z);
+
+            wonderOfYou.level.addFreshEntity(carProjectile);
+            wonderOfYou.setCarProjectile(carProjectile);
+            wonderOfYou.setLastCarSpawnTime(now);
+        } else {
+            wonderOfYou.getCarProjectile().setTarget(attacker);
+        }
     }
+
+
+
 
 }
