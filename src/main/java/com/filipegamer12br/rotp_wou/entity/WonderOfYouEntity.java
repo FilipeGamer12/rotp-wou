@@ -2,7 +2,6 @@ package com.filipegamer12br.rotp_wou.entity;
 
 import com.github.standobyte.jojo.entity.stand.StandEntity;
 import com.github.standobyte.jojo.entity.stand.StandEntityType;
-import net.minecraft.entity.EntityType;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -21,7 +20,6 @@ public class WonderOfYouEntity extends StandEntity {
 
     public WonderOfYouEntity(StandEntityType<WonderOfYouEntity> type, World world) {
         super(type, world);
-        //this.entityData.define(PHANTOM_WALK_ENABLED, false);
     }
 
     @Override
@@ -76,20 +74,6 @@ public class WonderOfYouEntity extends StandEntity {
         this.carProjectile = carProjectile;
     }
 
-    // Suponha que o ID da Phantom Walk seja algo assim
-    //private static final DataParameter<Boolean> PHANTOM_WALK_ENABLED = EntityDataManager.defineId(WonderOfYouEntity.class, DataSerializers.BOOLEAN);
-
-    // Método para checar se a habilidade está ativada
-//    public boolean isPhantomWalkEnabled() {
-//        return this.entityData.get(PHANTOM_WALK_ENABLED); // Retorna o valor sincronizado
-//    }
-
-    /*@Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(PHANTOM_WALK_ENABLED, false); // Certifique-se de que o valor está definido
-    }*/
-
     private long lastCarSpawnTime = 0;
 
     public long getLastCarSpawnTime() {
@@ -99,6 +83,5 @@ public class WonderOfYouEntity extends StandEntity {
     public void setLastCarSpawnTime(long time) {
         this.lastCarSpawnTime = time;
     }
-
 
 }

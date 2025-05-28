@@ -43,35 +43,6 @@ public class CalamityAttack extends StandEntityAction {
         }
     }
 
-    // Tick da ação: chamado a cada tick enquanto ativa
-    //@Override
-    //public void tick(World world, StandEntity standEntity, IStandPower userPower, StandEntityTask task) {
-//        if (!world.isClientSide() && standEntity instanceof WonderOfYouEntity) {
-//        WonderOfYouEntity wouEntity = (WonderOfYouEntity) standEntity;
-//
-//        if (wouEntity.isCalamityCarAttackEnabled()) {
-//            boolean hasStamina = drainStamina(userPower);
-//            if (!hasStamina) {
-//                wouEntity.setIsCalamityCarAttackEnabled(false); // Desativa ao esgotar stamina
-//            }
-//        }
-//    }
-
-    // Método de drenagem de stamina contínua
-//    private boolean drainStamina(IStandPower userPower) {
-//        if (userPower != null && userPower.getMaxStamina() > 0) {
-//            float staminaDrain = 2.0F; // por tick
-//            if (userPower.getStamina() >= staminaDrain) {
-//                userPower.consumeStamina(staminaDrain);
-//                return true;
-//            } else {
-//                userPower.consumeStamina(userPower.getStamina());
-//                return false;
-//            }
-//        }
-//        return false;
-//    }
-
     public static void drainStamina2(IStandPower userPower) {
         if (userPower != null && userPower.getMaxStamina() > 0) {
             // Drena 4 de stamina por tick

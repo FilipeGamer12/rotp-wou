@@ -19,7 +19,6 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class CarProjectileEntity extends TameableEntity {

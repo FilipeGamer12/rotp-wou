@@ -3,16 +3,11 @@ package com.filipegamer12br.rotp_wou.util;
 import com.filipegamer12br.rotp_wou.entity.CarProjectileEntity;
 import com.filipegamer12br.rotp_wou.init.InitEntities;
 import com.github.standobyte.jojo.entity.stand.StandEntity;
-import com.github.standobyte.jojo.entity.stand.StandEntityTask;
 import com.github.standobyte.jojo.power.impl.stand.type.StandType;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
 import net.minecraftforge.event.TickEvent;
 import com.filipegamer12br.rotp_wou.WonderOfYouAddon;
 import com.filipegamer12br.rotp_wou.entity.WonderOfYouEntity;
@@ -143,26 +138,7 @@ public class GameplayEventHandler {
             });
         }
     }
-    /*@SubscribeEvent
-    public static void onLivingHurt(LivingHurtEvent event) {
-        LivingEntity entity = event.getEntityLiving();
-        if (entity != null && !entity.level.isClientSide()) {
-            IStandPower.getStandPowerOptional(entity).ifPresent(power -> {
-                if (power.getType() == InitStands.WONDER_OF_YOU.getStandType() && power.isActive()) {
-                    if (power.getStandManifestation() instanceof WonderOfYouEntity) {
-                        WonderOfYouEntity wonderOfYouEntity = (WonderOfYouEntity) power.getStandManifestation();
 
-                        // Verifica se a habilidade CalamityActive está ativa
-                        if (wonderOfYouEntity.isCalamityActiveEnabled()) {
-                            // Reduz o dano recebido pelo usuário para 15% do valor original
-                            float originalDamage = event.getAmount();
-                            event.setAmount(originalDamage * 0.15F); // 15% do dano original
-                        }
-                    }
-                }
-            });
-        }
-    }*/
     @SubscribeEvent
     public static void onProjectileImpact(ProjectileImpactEvent event) {
         // Verifica se o projétil é uma instância de ProjectileEntity (ou seja, qualquer projétil)
@@ -250,49 +226,8 @@ public class GameplayEventHandler {
                 }
             });
         }
-        //phantom walk ability
-//        if (!player.level.isClientSide()) {
-//            IStandPower.getStandPowerOptional(player).ifPresent(power -> {
-//                // Verifica se o jogador tem o Stand "Wonder Of You" ativo
-//                if (power.getType() == InitStands.WONDER_OF_YOU.getStandType() && power.isActive()) {
-//                    if (power.getStandManifestation() instanceof WonderOfYouEntity) {
-//                        WonderOfYouEntity wonderOfYouEntity = (WonderOfYouEntity) power.getStandManifestation();
-//
-//                        // Verifica se a habilidade Phantom Walk está ativada (enquanto o player está agachado)
-//                        if (wonderOfYouEntity.isPhantomWalkEnabled()) {
-//                            if (player.isShiftKeyDown()) { // Verifica se o jogador está agachado
-//                                // Habilidade ativa enquanto o jogador está agachado
-//                                activatePhantomWalk(wonderOfYouEntity, player);
-//                            }
-//                        }
-//                    }
-//                }
-//            });
-//        }
+
     }
-
-    // Função que ativa a habilidade Phantom Walk para o jogador e o Stand
-//    public static void activatePhantomWalk(WonderOfYouEntity wonderOfYouEntity, PlayerEntity player) {
-//        // A posição do Stand (ou do jogador) para onde ele deve se mover
-//        Vector3d standPos = wonderOfYouEntity.position();
-//        Vector3d lookVector = wonderOfYouEntity.getLookAngle();
-//
-//        // Distância que o Stand ou jogador vai se mover
-//        double distance = 2.0;
-//        Vector3d targetPos = standPos.add(lookVector.x * distance, 0, lookVector.z * distance);
-//        BlockPos targetBlockPos = new BlockPos(targetPos);
-//
-//        // Verifica se o bloco à frente é sólido (para atravessar a parede)
-//        if (player.level.getBlockState(targetBlockPos).getMaterial().isSolid()) {
-//            // Teleporta o Stand para atravessar a parede
-//            wonderOfYouEntity.teleportTo(targetPos.x, targetPos.y, targetPos.z);
-//
-//            // Teleporta o jogador para a mesma posição
-//            player.teleportTo(targetPos.x, targetPos.y, targetPos.z);
-//        }
-//    }
-
-
 
     private static WonderOfYouEntity getStandEntityForPlayer(Entity owner) {
         if (owner instanceof PlayerEntity) {
