@@ -1,0 +1,23 @@
+{
+  "entity.rotp_wou.wonder_of_you": "Wonder Of You",
+  "stand.rotp_wou.wonder_of_you": "Wonder Of You",
+
+  "action.rotp_wou.punch": "Soco",
+  "action.rotp_wou.heavy_punch": "Soco Pesado",
+  "action.rotp_wou.finisher_punch": "Finalizador",
+  "action.rotp_wou.barrage": "Barragem",
+  "action.rotp_wou.block": "Bloqueio",
+  "action.rotp_wou.calamity_passive": "Calamidade: Passiva",
+  "action.rotp_wou.calamity_active": "Calamidade: Ativa",
+  "action.rotp_wou.explosion": "Explodir %s",
+  "action.rotp_wou.lightning_strike": "Ataque de Raios",
+  "action.rotp_wou.calamity_car_attack": "Ataque de Carro?!",
+
+  "rotp_wou.explosion.nothing": "Nada",
+
+  "rotp_wou.ost.full.wou_ost.name": "Wonder of You - Elvis x WoU",
+  "rotp_wou.ost.full.wou_ost.name.shortened": "Wonder of You",
+  "rotp_wou.ost.full.wou_ost2.name": "ASBR - Calamity is Coming",
+  "rotp_wou.ost.full.wou_ost2.name.shortened": "Calamity is Coming"
+
+}
