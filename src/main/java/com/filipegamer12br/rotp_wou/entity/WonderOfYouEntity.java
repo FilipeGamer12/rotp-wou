@@ -21,7 +21,7 @@ public class WonderOfYouEntity extends StandEntity {
 
     public WonderOfYouEntity(StandEntityType<WonderOfYouEntity> type, World world) {
         super(type, world);
-        this.entityData.define(PHANTOM_WALK_ENABLED, false);
+        //this.entityData.define(PHANTOM_WALK_ENABLED, false);
     }
 
     @Override
@@ -77,12 +77,12 @@ public class WonderOfYouEntity extends StandEntity {
     }
 
     // Suponha que o ID da Phantom Walk seja algo assim
-    private static final DataParameter<Boolean> PHANTOM_WALK_ENABLED = EntityDataManager.defineId(WonderOfYouEntity.class, DataSerializers.BOOLEAN);
+    //private static final DataParameter<Boolean> PHANTOM_WALK_ENABLED = EntityDataManager.defineId(WonderOfYouEntity.class, DataSerializers.BOOLEAN);
 
     // Método para checar se a habilidade está ativada
-    public boolean isPhantomWalkEnabled() {
-        return this.entityData.get(PHANTOM_WALK_ENABLED); // Retorna o valor sincronizado
-    }
+//    public boolean isPhantomWalkEnabled() {
+//        return this.entityData.get(PHANTOM_WALK_ENABLED); // Retorna o valor sincronizado
+//    }
 
     /*@Override
     protected void defineSynchedData() {
