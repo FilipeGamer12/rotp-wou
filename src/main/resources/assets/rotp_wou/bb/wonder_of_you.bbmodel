@@ -4,7 +4,7 @@
 		"model_format": "modded_entity",
 		"box_uv": true
 	},
-	"name": "wonder_of_you",
+	"name": "WOU",
 	"model_identifier": "WOU",
 	"modded_entity_entity_class": "",
 	"modded_entity_version": "1.15_mojmaps",
@@ -4120,12 +4120,12 @@
 			"children": [
 				{
 					"name": "head",
-					"origin": [-0.07949, 25.2, 0.42172],
+					"origin": [0, 25, 0],
 					"color": 0,
 					"uuid": "7aa292bd-e809-6656-df03-585e45f9d089",
 					"export": true,
 					"mirror_uv": false,
-					"isOpen": true,
+					"isOpen": false,
 					"locked": false,
 					"visibility": true,
 					"autouv": 0,
@@ -4208,16 +4208,16 @@
 				},
 				{
 					"name": "body",
-					"origin": [0, 0, 0],
+					"origin": [0, 25, 0],
 					"color": 0,
 					"uuid": "09a59464-ea67-bcc9-05b9-7d50e8270671",
 					"export": true,
 					"mirror_uv": false,
-					"isOpen": true,
+					"isOpen": false,
 					"locked": false,
 					"visibility": true,
 					"autouv": 0,
-					"selected": false,
+					"selected": true,
 					"children": [
 						{
 							"name": "rightLeg",
