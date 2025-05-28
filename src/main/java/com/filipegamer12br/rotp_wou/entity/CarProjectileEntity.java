@@ -6,6 +6,8 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -13,6 +15,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.CombatTracker;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -67,21 +70,13 @@ public class CarProjectileEntity extends TameableEntity {
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MonsterEntity.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 40.0D);
-//                .add(Attributes.MOVEMENT_SPEED, 0.6D)
-//                .add(Attributes.ATTACK_DAMAGE, 10.0D)
-//                .add(Attributes.FOLLOW_RANGE, 64.0D)
-//                .add(Attributes.ATTACK_KNOCKBACK, 7.5D);
+                .add(Attributes.MAX_HEALTH, 4.0D);
     }
 
     @Override
     public boolean isNoGravity() {
         return false;
     }
-
-//    public void setDataHits(int hits) {
-//        this.entityData.set(DATA_HITS, hits);
-//    }
 
     public int getHits() {
         return this.entityData.get(DATA_HITS);
@@ -99,15 +94,17 @@ public class CarProjectileEntity extends TameableEntity {
         return InitSounds.CAR_HURT.get();
     }
 
-//    public void setOwner(LivingEntity owner) {
-//    }
-
     //@Override
     public ITextComponent getDeathMessage(CombatTracker tracker) {
         return new StringTextComponent("");
     }
 
     public void setOwner(LivingEntity owner) {
+    }
+
+    @Override
+    public boolean isFood(ItemStack stack) {
+        return false; // Impede o player de alimentar a entidade
     }
 }
 
