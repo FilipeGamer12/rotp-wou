@@ -40,6 +40,15 @@
       }
     ]
   },
+  "calamity5": {
+    "sounds": [
+      {
+        "name": "rotp_wou:calamity5",
+        "stream": true,
+        "preload": true
+      }
+    ]
+  },
   "wou_ost_full": {
     "sounds": [
       {
