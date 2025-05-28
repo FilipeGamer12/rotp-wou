@@ -107,5 +107,7 @@ public class CarProjectileEntity extends TameableEntity {
         return new StringTextComponent("");
     }
 
+    public void setOwner(LivingEntity owner) {
+    }
 }
 
