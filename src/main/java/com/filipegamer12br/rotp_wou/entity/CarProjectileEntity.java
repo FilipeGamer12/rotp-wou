@@ -94,7 +94,6 @@ public class CarProjectileEntity extends TameableEntity {
         return InitSounds.CAR_HURT.get();
     }
 
-    //@Override
     public ITextComponent getDeathMessage(CombatTracker tracker) {
         return new StringTextComponent("");
     }
