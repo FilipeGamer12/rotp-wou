@@ -67,11 +67,11 @@ public class CarProjectileEntity extends TameableEntity {
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MonsterEntity.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 40.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.6D)
-                .add(Attributes.ATTACK_DAMAGE, 10.0D)
-                .add(Attributes.FOLLOW_RANGE, 64.0D)
-                .add(Attributes.ATTACK_KNOCKBACK, 7.5D);
+                .add(Attributes.MAX_HEALTH, 40.0D);
+//                .add(Attributes.MOVEMENT_SPEED, 0.6D)
+//                .add(Attributes.ATTACK_DAMAGE, 10.0D)
+//                .add(Attributes.FOLLOW_RANGE, 64.0D)
+//                .add(Attributes.ATTACK_KNOCKBACK, 7.5D);
     }
 
     @Override
@@ -79,9 +79,9 @@ public class CarProjectileEntity extends TameableEntity {
         return false;
     }
 
-    public void setDataHits(int hits) {
-        this.entityData.set(DATA_HITS, hits);
-    }
+//    public void setDataHits(int hits) {
+//        this.entityData.set(DATA_HITS, hits);
+//    }
 
     public int getHits() {
         return this.entityData.get(DATA_HITS);
@@ -99,8 +99,8 @@ public class CarProjectileEntity extends TameableEntity {
         return InitSounds.CAR_HURT.get();
     }
 
-    public void setOwner(LivingEntity owner) {
-    }
+//    public void setOwner(LivingEntity owner) {
+//    }
 
     //@Override
     public ITextComponent getDeathMessage(CombatTracker tracker) {

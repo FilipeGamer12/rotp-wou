@@ -27,7 +27,7 @@ public class InitSounds {
     
     public static final Supplier<SoundEvent> PUNCH_HEAVY = ModSounds.STAND_PUNCH_HEAVY;
     
-    public static final Supplier<SoundEvent> BARRAGE = ModSounds.STAND_PUNCH_LIGHT;
+    //public static final Supplier<SoundEvent> BARRAGE = ModSounds.STAND_PUNCH_LIGHT;
 
     public static final RegistryObject<SoundEvent> CALAMITY1 = SOUNDS.register("calamity1",
             () -> new SoundEvent(new ResourceLocation(WonderOfYouAddon.MOD_ID, "calamity1"))); // summon
