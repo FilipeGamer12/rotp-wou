@@ -143,9 +143,6 @@ public class WonderOfYouModel extends HumanoidStandModel<WonderOfYouEntity> {
     }
 
     protected void initActionPoses(){
-
-
-
         super.initActionPoses();
     }
 
