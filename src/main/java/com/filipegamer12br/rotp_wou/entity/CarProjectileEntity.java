@@ -56,7 +56,7 @@ public class CarProjectileEntity extends TameableEntity {
     }
 
     private void explodeCar() {
-        if (!this.level.isClientSide) {
+        if (!this.level.isClientSide) { // Adiciona partículas na explosão do Carro
             Explosion.Mode mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this) ? Explosion.Mode.DESTROY : Explosion.Mode.NONE;
             this.level.explode(this, this.getX(), this.getY(), this.getZ(), (float) this.explosionRadius, mode);
 
