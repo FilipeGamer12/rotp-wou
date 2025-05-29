@@ -47,7 +47,7 @@ public class GameplayEventHandler {
                         if (wonderOfYouEntity.isCalamityPassiveEnabled()) {
                             float damageToOurWOU = event.getAmount();
                             // Reduzir o dano recebido
-                            event.setAmount(damageToOurWOU * 0.85F);
+                            event.setAmount(damageToOurWOU * 0.20F);
 
                             // Verificar se o atacante é uma entidade viva
                             if (event.getSource().getEntity() instanceof LivingEntity) {
