@@ -73,9 +73,9 @@ public class InitStands {
     public static final RegistryObject<CalamityAttack> CALAMITY_CAR_ATTACK = ACTIONS.register("calamity_car_attack",
             () -> new CalamityAttack(new CalamityAttack.Builder()
                     .holdToFire(20, false)
-                    .staminaCost(600)
+                    .staminaCost(480)
                     .staminaCostTick(10)
-                    .standWindupDuration(20)
+                    .standWindupDuration(10)
                     .partsRequired(StandPart.MAIN_BODY)));
 
 
