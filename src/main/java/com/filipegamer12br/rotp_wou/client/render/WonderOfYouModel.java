@@ -58,10 +58,10 @@ public class WonderOfYouModel extends HumanoidStandModel<WonderOfYouEntity> {
                         // Torso
                         RotationAngle.fromDegrees(torso, 2.5, 0.0, 0.0),
 
-                        // Stick (stick) - Atualização da rotação e posição
-                        RotationAngle.fromDegrees(stick, 4.80848, 44.06251, 69.96147),
+                        // Stick (stick)
+                        RotationAngle.fromDegrees(stick, 17.9897F, 50.4958F, 91.7697F),
 
-                        // Escudo (bone)
+                        // Bone (bone)
                         RotationAngle.fromDegrees(bone, 7.5, 0.0, 0.0),
 
                         // Bone2 (bone2)
@@ -115,7 +115,7 @@ public class WonderOfYouModel extends HumanoidStandModel<WonderOfYouEntity> {
                 RotationAngle.fromDegrees(torso, 2.5, 0.0, 0.0),
 
                 // Stick (stick) - Atualização da rotação e posição
-                RotationAngle.fromDegrees(stick, 4.80848, 44.06251, 69.96147),
+                RotationAngle.fromDegrees(stick, 17.9897F, 50.4958F, 91.7697F),
 
                 // Escudo (bone)
                 RotationAngle.fromDegrees(bone, 7.5, 0.0, 0.0),
