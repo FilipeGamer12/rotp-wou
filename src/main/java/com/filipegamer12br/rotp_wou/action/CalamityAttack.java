@@ -24,11 +24,6 @@ public class CalamityAttack extends StandEntityAction {
             WonderOfYouEntity wouEntity = (WonderOfYouEntity) standEntity;
             long currentTick = world.getGameTime();
 
-            // Impede reativação durante o cooldown
-            if ((currentTick - lastActivationTick) < COOLDOWN_TICKS) {
-                return;
-            }
-
             // Alterna o estado da habilidade
             boolean currentlyEnabled = wouEntity.isCalamityCarAttackEnabled();
             wouEntity.setIsCalamityCarAttackEnabled(!currentlyEnabled);
