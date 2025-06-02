@@ -70,7 +70,7 @@ public class CarProjectileEntity extends TameableEntity {
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MonsterEntity.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 4.0D);
+                .add(Attributes.MAX_HEALTH, 40.0D);
     }
 
     @Override
