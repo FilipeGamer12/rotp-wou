@@ -26,14 +26,5 @@ public class ClientInit {
         // Registro do renderizador para CarProjectile
         RenderingRegistry.registerEntityRenderingHandler(
                 InitEntities.CAR_PROJECTILE.get(), CarProjectileRenderer::new);
-
-        /*StandStatsRenderer.overrideCosmeticStats(
-                InitStands.WONDER_OF_YOU.getStandType().getRegistryName(),
-                new StandStatsRenderer.ICosmeticStandStats() {
-                    @Override
-                    public double statConvertedValue(StandStatsRenderer.StandStat stat, IStandPower standData, StandStats stats, float statLeveling) {
-                        return 0;
-                    }
-                });*/
     }
 }
