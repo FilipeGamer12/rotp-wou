@@ -1,6 +1,8 @@
 {
+  "skins": {
     "rotp_wou:manga_2": {
       "stand_type": "rotp_wou:wonder_of_you",
       "color": "0x80C78A"
     }
+  }
 }
