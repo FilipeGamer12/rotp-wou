@@ -1,0 +1,25 @@
+{
+  "entity.rotp_wou.wonder_of_you": "奇迹于你",
+  "stand.rotp_wou.wonder_of_you": "奇迹于你",
+
+  "action.rotp_wou.punch": "挥拳",
+  "action.rotp_wou.heavy_punch": "重拳",
+  "action.rotp_wou.finisher_punch": "终结一击",
+  "action.rotp_wou.barrage": "连打",
+  "action.rotp_wou.block": "防御",
+  "action.rotp_wou.calamity_passive": "灾厄·被动",
+  "action.rotp_wou.calamity_active": "灾厄·主动",
+  "action.rotp_wou.calamity_rain": "灾厄之雨",
+  "action.rotp_wou.explosion": "引爆%s",
+  "action.rotp_wou.lightning_strike": "闪电打击",
+  "action.rotp_wou.calamity_car_attack": "灾厄飞车",
+  
+  "entity.rotp_wou.car_projectile": "轿车",
+
+  "rotp_wou.explosion.nothing": "未触发灾厄",
+
+  "rotp_wou.ost.full.wou_ost.name": "奇迹于你- Elvis x 灾厄化身",
+  "rotp_wou.ost.full.wou_ost.name.shortened": "奇迹于你",
+  "rotp_wou.ost.full.wou_ost2.name": "ASBR - 灾厄将至",
+  "rotp_wou.ost.full.wou_ost2.name.shortened": "灾厄将至"
+}
